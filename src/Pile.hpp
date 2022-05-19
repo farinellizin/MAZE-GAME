@@ -1,23 +1,38 @@
-#ifndef PILE_HPP
-#define PILE_HPP
-#include <iostream>
+#ifndef PILHA_HPP 
+#define PILHA_HPP
 
-#define MAXTAM_STACK 10
+#include<stdio.h>
+#include<stdlib.h>
+#include<stdbool.h>
+#include<math.h>
+#include<fstream>
+#include<string>
+#include<iostream>
 
-typedef struct Item_Stack{
+typedef struct SItem SItem;
+typedef struct SBlock SBlock;
+typedef struct Pilha Pilha;
+
+struct SItem{
 	int val;
-}Item_Stack;
+};
 
-typedef struct Pilha{
-	Item_Stack vet[MAXTAM_STACK];
-	int top;
-	int base;
-}Pilha;
+struct SBlock{
+	SItem data;
+	SBlock *prox;
+};
+
+struct Pilha{
+	SBlock *base;
+	SBlock *top;
+};
 
 void FPVazia(Pilha *p);
-void PUSH(Pilha *p, Item_Stack d);
-void POP(Pilha *p, Item_Stack *d);
-void PRemove(Pilha *p, Item_Stack d);
+void Push(Pilha *p, SItem d);
+void Pop(Pilha *p, SItem *d);
+int return_matrix_size_stack();
+void get_matrix_values_stack(char *vet);
+void runMatrix();
 void PImprime(Pilha *p);
 
 #endif

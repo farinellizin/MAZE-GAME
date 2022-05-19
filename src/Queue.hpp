@@ -1,23 +1,34 @@
 #ifndef QUEUE_HPP
 #define QUEUE_HPP
 #include <iostream>
+#include <fstream>
 
-#define MAXTAM_QUEUE 4
+typedef struct Item Item;
+typedef struct Block Block;
+typedef struct Fila Fila;
 
-typedef struct Item{
+struct Item{
 	int val;
-}Item;
+};
 
-typedef struct Fila{
-	Item vet[MAXTAM_QUEUE];
-	int first;
-	int last;
-}Fila;
+struct Block{
+	Item data;
+	Block *prox;
+};
+
+struct Fila{
+	Block *first;
+	Block *last;
+};
 
 void FFVazia(Fila *f);
 void Enfileira(Fila *f, Item d);
 void Desenfileira(Fila *f, Item *d);
-void FRemove(Fila *f, Item d);
 void FImprime(Fila *f);
+bool queue_is_empty(Fila *f);
+
+int return_matrix_size();
+void get_matrix_values(char *vet);
+void solve();
 
 #endif

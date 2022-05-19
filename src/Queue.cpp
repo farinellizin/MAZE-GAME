@@ -1,55 +1,163 @@
 #include "Queue.hpp"
+using namespace std;
 
 void FFVazia(Fila *f){
-	f->first = 1;
-	f->last  = 1;
+	f -> first = (Block*) malloc (sizeof(Block));
+	f -> last  = f -> first;
+	f -> first -> prox = NULL;
 }
 
 void Enfileira(Fila *f, Item d){
-	if (f->last % MAXTAM_QUEUE + 1 == f->first){
-		printf("FILA CHEIA!\n");
-	}else{
-		f->vet[f->last - 1] = d;
-		f->last = f->last % MAXTAM_QUEUE + 1;
-	}
+	f -> last -> prox = (Block*) malloc (sizeof(Block));
+	f -> last = f -> last -> prox;
+	f -> last -> data = d;
+	f -> last -> prox = NULL;
 }
 
 void Desenfileira(Fila *f, Item *d){
-	if(f->first == f->last)
-		printf("FILA VAZIA!\n");
-	else{
-		*d = f->vet[f->first - 1];
-		f->first = f->first % MAXTAM_QUEUE + 1;
-	}
-}
+	Block *aux;
 
-void FRemove(Fila *f, Item d){
-	Fila aux;
-	Item rem;
+	if(f -> first == f -> last || f == NULL || f -> first -> prox == NULL){
+		printf("FILA VAZIA!\n");
+		return;
+	}
 	
-	FFVazia(&aux);
-
-	if(f->first == f->last)
-		printf("FILA VAZIA!\n");
-	else{
-		while(f->first != f->last){
-			Desenfileira(f, &rem);
-			if(rem.val != d.val)
-				Enfileira(&aux, rem);
-		}
-		
-		*f = aux;
-	}
+	aux = f -> first -> prox;
+	f -> first -> prox = aux -> prox;
+    if (f -> first -> prox == NULL) {
+        f -> last = f -> first;
+    
+    }
+	d -> val = aux -> data.val;
+	free(aux);
 }
 
 void FImprime(Fila *f){
-	int aux = f->first;
-	
-	while(aux != f->last){
-		printf("%d\t", f->vet[aux-1].val);
-		aux = aux % MAXTAM_QUEUE + 1;
-	}
+	Block *aux;
 
-	printf("\n");
-		
+	aux = f -> first -> prox;
+	while(aux != NULL){
+		cout << aux -> data.val << " ";
+		aux = aux -> prox;
+	}
+}
+
+bool queue_is_empty(Fila *f) {
+    if (f -> first == f -> last || f -> first -> prox == NULL || f == NULL) {
+        return true; 
+    } else {
+        return false;
+    }
+}
+
+int return_matrix_size() {
+	string letter;
+    int matrix_tam;
+    ifstream file;
+    file.open("matrix_read.txt");
+
+    if (file.is_open()) {
+        getline(file, letter);
+		matrix_tam = stoi(letter);
+    }
+
+    file.close();
+    return matrix_tam;
+}
+
+int matrix_tam = return_matrix_size();
+
+void get_matrix_values(char *vet_aux) {
+	char letter;
+    int k = 0;
+    ifstream file;
+    file.open("matrix_read.txt");
+
+    if (file.is_open()) {
+        while (!file.eof()) {
+            for (int i = 0; i < matrix_tam; i++) {
+                for (int j = 0; j < matrix_tam; j++) {
+                    file.get(letter);
+                    if (letter == 'A' || letter == 'P') {
+                        vet_aux[k] = letter;
+                        k++;
+                    } 
+                }
+            }
+        }
+    }
+  
+    file.close();
+}
+
+void solve() {
+	int matrix_tam = return_matrix_size(), k = 0, i, j;
+    char matrix[matrix_tam][matrix_tam], vet_aux[matrix_tam*matrix_tam];
+    get_matrix_values(vet_aux);
+    
+    k = 0;
+
+    for (i = 0; i < matrix_tam; i++) {
+        for (j = 0; j < matrix_tam; j++) {
+            matrix[i][j] = vet_aux[k];
+            k++;       
+        }
+    }
+
+    for (i = 0; i < matrix_tam; i++) {
+        for (j = 0; j < matrix_tam; j++) {
+            cout << matrix[i][j] << "\t";       
+        }
+        cout << endl;
+    }
+
+    Fila linha, coluna; 
+    Item l, c;
+    // i = 0; j = 0;
+    int cont = 0;
+    FFVazia(&linha); 
+    FFVazia(&coluna);
+    l.val = 0;
+    c.val = 0;
+    // l.val = i; c.val = j;
+    //matrix[i][j] = 'I';
+    cout << endl << endl;
+    while (i != matrix_tam - 1 || j != matrix_tam - 1) {
+        i = l.val;
+        j = c.val;
+
+        if (matrix[i + 1][j] == 'A' && (i < (matrix_tam - 1))){ // IR PARA BAIXO
+            l.val = i + 1;
+            c.val = j;
+            matrix[i + 1][j] = 'v';
+            Enfileira(&linha, l);
+            Enfileira(&coluna, c);
+            cout << "ENFILEIREI [" << l.val << "] [" << c.val << "]" << endl;
+        }
+
+        if (matrix[i][j + 1] == 'A' && (j < (matrix_tam - 1))) { // IR PARA DIREITA
+            l.val = i;
+            c.val = j + 1;
+            matrix[i][j + 1] = '>';
+            Enfileira(&linha, l);
+            Enfileira(&coluna, c);
+            cout << "ENFILEIREI [" << l.val << "] [" << c.val << "]" << endl;
+        }
+
+        Desenfileira(&linha, &l);
+        Desenfileira(&coluna, &c);
+        cout << "DESENFILEIREI [" << l.val << "] [" << c.val << "]" << endl << endl;
+        if (i != matrix_tam-1 || j != matrix_tam-1) {
+            cont++;
+        }
+    }
+
+    cout << endl << endl << "ITERACOES: " << cont << endl << endl;
+
+    for (i = 0; i < matrix_tam; i++) {
+        for(j = 0; j < matrix_tam; j++) {
+            cout << matrix[i][j] << "\t";
+        }
+        cout << endl;
+    }
 }
