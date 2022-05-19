@@ -16,7 +16,9 @@ Neste programa serão utilizados dois tipos de busca: A busca em profundidade co
 
 A busca em profundidade controlada por uma estrutura de pilha, tem como finalidade buscar o último elemento de uma matriz quadrada de tamanho <strong>n</strong>, empilhando as posições por onde passa e desempilhando as posições por onde o programa testou e não conseguiu passar, priorizando a busca sempre pelo movimento de se locomover para baixo, e quando não se pode mais mover para baixo, é priorizado mover para a direita, como no exemplo a seguir:
 
-<img height="250rem" src="/imgs/dfs-example.png">
+<p align="center">
+  <img height="250rem" src="/imgs/dfs-example.png">
+</p>
 
 A partir de testes de diferentes matrizes quadradas com inúmeras posições de obstáculos na matriz, foi possível notar que há uma ordem de prioridade circular no sistema DFS, descrevendo-o em ordem, da seguinte forma:
 
@@ -31,7 +33,98 @@ Para que o programa não entre em um looping, foi necessário usar uma técnica 
 
 ### Busca em largura controlada por fila (BFS)
 
-<img height="250rem" src="/imgs/bfs-example.png">
+<p align="center">
+  <img height="250rem" src="/imgs/bfs-example.png">
+</p>
+
+## Exemplificando
+
+Usando a seguinte matriz quadrada de tamanho 6 para testar os algoritmos de busca em largura (BFS) e de busca em profundidade (DFS), podemos obter os seguintes resultados:
+
+<table align="center">
+  <tr>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+    <td>P</td>
+    <td>A</td>
+    <td>A</td>
+  </tr>
+  <tr>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+    <td>P</td>
+    <td>A</td>
+    <td>A</td>
+  </tr>
+  <tr>
+    <td>A</td>
+    <td>A</td>
+    <td>P</td>
+    <td>A</td>
+    <td>A</td>
+    <td>P</td>
+    <td>A</td>
+  </tr>
+  <tr>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+  </tr>
+  <tr>
+    <td>A</td>
+    <td>P</td>
+    <td>A</td>
+    <td>A</td>
+    <td>P</td>
+    <td>A</td>
+    <td>A</td>
+  </tr>
+  <tr>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+    <td>P</td>
+    <td>A</td>
+  </tr>
+  <tr>
+    <td>A</td>
+    <td>P</td>
+    <td>A</td>
+    <td>P</td>
+    <td>A</td>
+    <td>A</td>
+    <td>A</td>
+  </tr>
+</table>
+
+  Observação: As posições nomeadas com 'A' são caminhos por onde o algoritmo pode andar e as posições nomeadas com 'P' são as barreiras, onde o algoritmo não pode andar.  
+
+<ul>
+  <li>
+    <strong>Busca em profundidade (DFS):</strong>
+    <p>
+      <code>Resultados apresentados após executar o DFS</code>
+    </p>
+  </li>
+  <li>
+    <strong>Busca em largura (BFS):</strong>
+    <p>
+      <code>Resultados apresentados após executar o BFS</code>
+    </p>
+  </li>
+</ul>
+
+Lembrando que para coletar estes mesmos resultados, o usuário deverá testar os algoritmos com a mesma matriz mostrada acima.
 
 ## Perguntas
 
@@ -41,7 +134,7 @@ Foi observado que quando se é passado um número pequeno de obstáculos compara
 
 <strong>Um dos dois algoritmos consegue encontrar o melhor caminho, ou seja, o com menor número de passos?</strong>
 
-Depende do tamanho da matriz e da quantidade de obstáculos inseridos nessa matriz, sendo predominante o BFS para muitos obstáculos inseridos e o DFS para poucos obstáculos inseridos.
+Dependendo do tamanho da matriz e da quantidade de obstáculos inseridos nessa matriz, sendo predominante o BFS para muitos obstáculos inseridos e o DFS para poucos obstáculos inseridos.
 
 ## Compilação e execução
 
