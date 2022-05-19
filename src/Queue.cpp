@@ -18,7 +18,7 @@ void Desenfileira(Fila *f, Item *d){
 	Block *aux;
 
 	if(f -> first == f -> last || f == NULL || f -> first -> prox == NULL){
-		printf("FILA VAZIA!\n");
+		//printf("FILA VAZIA!\n");
 		return;
 	}
 	
@@ -26,7 +26,6 @@ void Desenfileira(Fila *f, Item *d){
 	f -> first -> prox = aux -> prox;
     if (f -> first -> prox == NULL) {
         f -> last = f -> first;
-    
     }
 	d -> val = aux -> data.val;
 	free(aux);
@@ -113,40 +112,34 @@ void solve() {
 
     Fila linha, coluna; 
     Item l, c;
-    // i = 0; j = 0;
     int cont = 0;
     FFVazia(&linha); 
     FFVazia(&coluna);
     l.val = 0;
     c.val = 0;
-    // l.val = i; c.val = j;
-    //matrix[i][j] = 'I';
     cout << endl << endl;
     while (i != matrix_tam - 1 || j != matrix_tam - 1) {
         i = l.val;
         j = c.val;
 
-        if (matrix[i + 1][j] == 'A' && (i < (matrix_tam - 1))){ // IR PARA BAIXO
+        if (matrix[i + 1][j] == 'A' && (i < (matrix_tam - 1))){ 
             l.val = i + 1;
             c.val = j;
             matrix[i + 1][j] = 'v';
             Enfileira(&linha, l);
             Enfileira(&coluna, c);
-            cout << "ENFILEIREI [" << l.val << "] [" << c.val << "]" << endl;
         }
 
-        if (matrix[i][j + 1] == 'A' && (j < (matrix_tam - 1))) { // IR PARA DIREITA
+        if (matrix[i][j + 1] == 'A' && (j < (matrix_tam - 1))) { 
             l.val = i;
             c.val = j + 1;
             matrix[i][j + 1] = '>';
             Enfileira(&linha, l);
             Enfileira(&coluna, c);
-            cout << "ENFILEIREI [" << l.val << "] [" << c.val << "]" << endl;
         }
 
         Desenfileira(&linha, &l);
         Desenfileira(&coluna, &c);
-        cout << "DESENFILEIREI [" << l.val << "] [" << c.val << "]" << endl << endl;
         if (i != matrix_tam-1 || j != matrix_tam-1) {
             cont++;
         }
