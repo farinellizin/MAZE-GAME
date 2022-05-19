@@ -103,7 +103,10 @@ void solve() {
         }
     }
 
+    cout << "\t\t\t    ~ This is the matrix read from the file ~" << endl << endl;
+
     for (i = 0; i < matrix_tam; i++) {
+        cout << "\t\t\t";
         for (j = 0; j < matrix_tam; j++) {
             cout << matrix[i][j] << "\t";       
         }
@@ -145,12 +148,21 @@ void solve() {
         }
     }
 
-    cout << endl << endl << "ITERACOES: " << cont << endl << endl;
+    matrix[0][0] = 'S'; matrix[matrix_tam - 1][matrix_tam - 1] = 'F';
+
+    cout << "\t\t\tAfter completing the process of roaming throughout " << endl;
+    cout << "\t\tthe entire matrix by the BFS method, we could count " << cont << " iterations.";
+    cout << endl << endl << "\t\t   ~ This is the path used to make it to the final position ~" << endl << endl;
 
     for (i = 0; i < matrix_tam; i++) {
+        cout << "\t\t\t";
         for(j = 0; j < matrix_tam; j++) {
             cout << matrix[i][j] << "\t";
         }
         cout << endl;
     }
+
+    cout << endl << "\t\t    'S' corresponds to the initial position, it stands for 'Start'." << endl;
+    cout << "\t\t    'F' corresponds to the final position, it stands for 'Finish'." << endl;
+    cout << "\t\t    All the arrows corresponds to the move made in the previous position." << endl;
 }
