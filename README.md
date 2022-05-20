@@ -12,7 +12,7 @@ visando sempre o menor número de iterações, na capacidade de cada tipo de bus
 
 ## Sobre os tipos de busca
 Neste programa serão utilizados dois tipos de busca: A busca em profundidade comumente chamada de DFS, e a busca em largura, frequentemente chamada de BFS.
-### BFS - Breadth-First Search
+### - BFS - Breadth-First Search
   - O método de busca BFS tem como propósito propagar a busca pelo algoritmo na forma de onda, buscando todas as posições na qual o mesmo pode acessar,
   a fim de que possa visualizar todos os caminhos possíveis.
 
@@ -33,7 +33,7 @@ A fim de caminhar por toda a matriz foi utilizado um looping **_while()_**, com 
 fossem diferentes das coordenadas da posição final, em [N][N], e a posição de análise inicial fosse, de fato, o início da matriz, em [0][0].
 
   
-### DFS - Depth-first search
+### - DFS - Depth-first search
   - A busca em profundidade controlada por uma estrutura de pilha, tem como finalidade buscar o último elemento de uma matriz quadrada de tamanho n, 
 empilhando as posições por onde passa e desempilhando as posições por onde o programa testou e não conseguiu passar, priorizando a busca sempre pelo
 movimento de se locomover para baixo, e quando não se pode mais mover para baixo, é priorizado mover para a direita, como no exemplo a seguir:
@@ -71,6 +71,19 @@ e inválidas por onde passou, analisou e testou, para que não aconteça do prog
     2. Na impressão do 'BFS', as setas correspondem à movimentação realizada pela casa anterior;
     3. Na impressão do 'DFS', os 'x' representam as posições que o algoritmo passou para realizar correto caminhamento;
     4. Na impressão final, 'F' corresponde à posição final da matriz, enquanto 'S', corresponde a posição inicial.
+   
+  - Funções utilizadas:
+    1. Além das funções default utilizadas para criação e manipulação de **Pilhas** e **Filas**, foram criados os seguintes métodos:
+      - Para implementação do **BFS**:
+        - **_queue_is_empty():_** função booleana para verificar se a fila se encontra vazia.
+        - **_return_matrix_size():_** retorna um inteiro correspondete ao tamanho da matriz.
+        - **_get_matrix_values():_** preenche um vetor com os valores da matriz.
+        - **_solve():_** de fato, implementa o método BFS.
+      
+      - Para implementação do **DFS**:
+        - **_return_matrix_size_stack():_** retorna um inteiro correspondete ao tamanho da matriz.
+        - **_get_matrix_values_stack():_** preenche um vetor com os valores da matriz.
+        - **_runMatrix():_** de fato, implenta o método DFS.
 
 ## Exemplificando
   - Levando em consideração as pontuações realizadas anteriormente no documento, foram realizados testes em ambos os métodos, tanto BFS quanto DFS, 
@@ -146,7 +159,7 @@ e inválidas por onde passou, analisou e testou, para que não aconteça do prog
       <img height="150rem" src="/imgs/BFSMethod.png">
     </p>
     
-- **Resolução apresentada usando DFS:**
+- **Resolução apresentada usando BFS:**
 <p align="center">
       <img height="150rem" src="/imgs/DFSMethod.png">
     </p>
@@ -192,5 +205,3 @@ e inválidas por onde passou, analisou e testou, para que não aconteça do prog
 
 - lucasfcpinho@gmail.com
 - felipecampos50123@gmail.com
-  
-
