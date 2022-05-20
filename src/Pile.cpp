@@ -64,7 +64,6 @@ void get_matrix_values_stack(char *vet) {
 }
 
 void runMatrix(){
-	//cout << matrix_tam_stack;
 	Pilha coluna, linha;
 	SItem c, l;
 	FPVazia(&coluna);
@@ -72,6 +71,7 @@ void runMatrix(){
 
 	int checker = 0, i = 0, j = 0, cont = 0, k;
     char matrix[matrix_tam_stack][matrix_tam_stack], vet_aux[matrix_tam_stack*matrix_tam_stack];
+    char matrix_aux[matrix_tam_stack][matrix_tam_stack];
 	get_matrix_values_stack(vet_aux);
     k = 0;
 	
@@ -83,8 +83,17 @@ void runMatrix(){
         }
     }
 
+    for (i = 0; i < matrix_tam_stack; i++){
+    	for (j = 0; j < matrix_tam_stack; j++){
+    		matrix_aux[i][j] = matrix[i][j];
+    	}
+    }
+
+    cout << "\t\t\t    ~ This is the matrix read from the file ~" << endl << endl;
+
     for (i = 0; i < matrix_tam_stack; i++) {
-        for (j = 0; j < matrix_tam_stack; j++) {
+        cout << "\t\t\t";
+		for (j = 0; j < matrix_tam_stack; j++) {
             cout << matrix[i][j] << "\t"; 	      
         }
         cout << endl;
@@ -96,15 +105,13 @@ void runMatrix(){
 	Push(&linha, l);
 	Push(&coluna, c);
 
-	printf("Caminho percorrido em [i][j]:\t");
-
 	while(checker != 1){
 		
 		//Na primeira coluna
 		if(j == 0){
 			//Anda pra baixo
 			if(matrix[i+1][j] != 'P' && (i+1 < matrix_tam_stack)){
-				printf("[%d][%d]\t", i, j);
+				matrix_aux[i][j] = 'x';
 				i++;
 				l.val = i;
 				c.val = j;
@@ -113,7 +120,7 @@ void runMatrix(){
 			}
 			//Anda pra direita
 			else if(matrix[i][j+1] != 'P'){
-				printf("[%d][%d]\t", i, j);
+				matrix_aux[i][j] = 'x';
 				j++;
 				l.val = i;
 				c.val = j;
@@ -122,14 +129,11 @@ void runMatrix(){
 			}
 			//Volta pra cima
 			else if((matrix[i][j+1] == 'P') && ((matrix[i+1][j] == 'P') || i+1 >= matrix_tam_stack)){
-				printf("[%d][%d]\t", i, j);
+				matrix_aux[i][j] = 'x';
 				matrix[i][j] = 'P';
 				Pop(&linha, &l);
 				Pop(&coluna, &c);
 				i--;
-			}
-			else{
-				//printf("Obstáculos mal posicionados.\n\n");
 			}
 		}
 
@@ -137,7 +141,7 @@ void runMatrix(){
 		else if(j > 0 && j < (matrix_tam_stack - 1) && (i < matrix_tam_stack)){
 			//Anda pra baixo
 			if(matrix[i+1][j] != 'P' && i < (matrix_tam_stack-1)){
-				printf("[%d][%d]\t", i, j);
+				matrix_aux[i][j] = 'x';
 				i++;
 				l.val = i;
 				c.val = j;
@@ -146,7 +150,7 @@ void runMatrix(){
 			}
 			//Anda pra direita
 			else if(matrix[i][j+1] != 'P'){
-				printf("[%d][%d]\t", i, j);
+				matrix_aux[i][j] = 'x';
 				j++;
 				l.val = i;
 				c.val = j;
@@ -155,7 +159,7 @@ void runMatrix(){
 			}
 			//Anda pra cima
 			else if((matrix[i][j+1] == 'P') && (matrix[i+1][j] == 'P' || i == (matrix_tam_stack-1)) && (matrix[i-1][j] != 'P')){
-				printf("[%d][%d]\t", i, j);
+				matrix_aux[i][j] = 'x';
 				matrix[i][j] = 'P';
 				Pop(&linha, &l);
 				Pop(&coluna, &c);
@@ -163,14 +167,11 @@ void runMatrix(){
 			}
 			//Anda pra esquerda
 			else if((matrix[i][j+1] == 'P') && (matrix[i+1][j] == 'P' || i == matrix_tam_stack-1) && matrix[i-1][j] == 'P'){
-				printf("[%d][%d]\t", i, j);
+				matrix_aux[i][j] = 'x';
 				matrix[i][j] = 'P';
 				Pop(&linha, &l);
 				Pop(&coluna, &c);
 				j--;
-			}
-			else{
-				//printf("Obstáculos mal posicionados.\n\n");
 			}
 		}
 
@@ -178,22 +179,21 @@ void runMatrix(){
 		else if(j == (matrix_tam_stack - 1)){
 			if(i == (matrix_tam_stack - 1)){
 				checker = 1;
-				printf("[%d][%d]\t", i, j);
-				printf("FIM!!\n\n");
+				matrix_aux[i][j] = 'x';
 			}
 
 			//Anda pra baixo
 			else if(matrix[i+1][j] != 'P' && i < matrix_tam_stack){
-				printf("[%d][%d]\t", i, j);
+				matrix_aux[i][j] = 'x';
 				i++;
 				l.val = i;
 				c.val = j;
 				Push(&linha, l);
 				Push(&coluna, c);
 			}
-			//Anda pra esquerda  *** ATENÇÃO ***
+			//Anda pra esquerda  * ATENÇÃO *
 			else if((i == 0) && matrix[i+1][j] == 'P'){
-				printf("[%d][%d]\t", i, j);
+				matrix_aux[i][j] = 'x';
 				matrix[i][j] = 'P';
 				Pop(&linha, &l);
 				Pop(&coluna, &c);
@@ -201,8 +201,7 @@ void runMatrix(){
 			}
 			//Anda pra esquerda
 			else if(matrix[i+1][j] == 'P'){
-				printf("[%d][%d]\t", i, j);
-				// printf("i: %d, j: %d\n\n", i, j);
+				matrix_aux[i][j] = 'x';
 				j--;
 				l.val = i;
 				c.val = j;
@@ -211,25 +210,33 @@ void runMatrix(){
 			}
 			//Anda pra cima
 			else if((matrix[i+1][j] == 'P') && (matrix[j-1][i] == 'P')){
-				printf("[%d][%d]\t", i, j);
+				matrix_aux[i][j] = 'x';
 				matrix[i][j] = 'P';
 				Pop(&linha, &l);
 				Pop(&coluna, &c);
 				i--;
 			}
-			else{
-				//printf("Obstáculos mal posicionados.\n\n");
-			}
 		}
 		cont++;
 	}
 
-	printf("Posições empilhadas de linha:\t");
-	PImprime(&linha);
-	printf("Posições empilhadas de coluna:\t");
-	PImprime(&coluna);
+	cout << endl << "\t\t\tAfter completing the process of roaming throughout " << endl;
+    cout << "\t\tthe entire matrix by the DFS method, we could count " << cont << " iterations.";
+    cout << endl << endl << "\t\t   ~ This is the path used to make it to the final position ~" << endl << endl;
 
-	printf("Número de posições testadas: %d\n\n", cont);
+	matrix_aux[0][0] = 'S'; matrix_aux[matrix_tam_stack - 1][matrix_tam_stack - 1] = 'F';	
+
+	for (i = 0; i < matrix_tam_stack; i++) {
+    	cout << "\t\t\t";
+		for (j = 0; j < matrix_tam_stack; j++) {
+            cout << matrix_aux[i][j] << "\t"; 	      
+        }
+        cout << endl;
+    }
+
+    cout << endl << "\t\t    'S' corresponds to the initial position, it stands for 'Start'." << endl;
+    cout << "\t\t    'F' corresponds to the final position, it stands for 'Finish'." << endl;
+    cout << "\t\t    All the 'x' corresponds to the move made in the previous position." << endl;
 }
 
 
