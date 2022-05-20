@@ -12,7 +12,7 @@ visando sempre o menor número de iterações, na capacidade de cada tipo de bus
 
 ## Sobre os tipos de busca
 Neste programa serão utilizados dois tipos de busca: A busca em profundidade comumente chamada de DFS, e a busca em largura, frequentemente chamada de BFS.
-### - BFS - Breadth-First Search
+### BFS - Breadth-First Search
   - O método de busca BFS tem como propósito propagar a busca pelo algoritmo na forma de onda, buscando todas as posições na qual o mesmo pode acessar,
   a fim de que possa visualizar todos os caminhos possíveis.
 
@@ -33,7 +33,7 @@ A fim de caminhar por toda a matriz foi utilizado um looping **_while()_**, com 
 fossem diferentes das coordenadas da posição final, em [N][N], e a posição de análise inicial fosse, de fato, o início da matriz, em [0][0].
 
   
-### - DFS - Depth-first search
+### DFS - Depth-first search
   - A busca em profundidade controlada por uma estrutura de pilha, tem como finalidade buscar o último elemento de uma matriz quadrada de tamanho n, 
 empilhando as posições por onde passa e desempilhando as posições por onde o programa testou e não conseguiu passar, priorizando a busca sempre pelo
 movimento de se locomover para baixo, e quando não se pode mais mover para baixo, é priorizado mover para a direita, como no exemplo a seguir:
