@@ -141,6 +141,14 @@ void solve() {
             Enfileira(&coluna, c);
         }
 
+        if (queue_is_empty(&linha) && matrix[i - 1][j] == 'A' && (i > 0)) {
+            l.val = i - 1;
+            c.val = j;
+            matrix[i - 1][j] = '^';
+            Enfileira(&linha, l);
+            Enfileira(&coluna, c);
+        }
+
         Desenfileira(&linha, &l);
         Desenfileira(&coluna, &c);
         if (i != matrix_tam-1 || j != matrix_tam-1) {

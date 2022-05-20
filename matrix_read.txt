@@ -1,7 +1,7 @@
 7
-A   A   A   A   P   A   A
-A   A   A   A   P   A   A
-A   A   P   A   A   P   A
+A   P   A   A   A   A   A
+A   A   A   P   P   P   A
+P   P   A   P   A   P   A
 A   A   A   A   A   A   A
 A   P   A   A   P   A   A
 A   A   A   A   A   P   A
