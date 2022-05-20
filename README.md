@@ -159,7 +159,7 @@ e inválidas por onde passou, analisou e testou, para que não aconteça do prog
       <img height="150rem" src="/imgs/BFSMethod.png">
     </p>
     
-- **Resolução apresentada usando BFS:**
+- **Resolução apresentada usando DFS:**
 <p align="center">
       <img height="150rem" src="/imgs/DFSMethod.png">
     </p>
