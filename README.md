@@ -39,7 +39,7 @@ Para que o programa não entre em um looping, foi necessário usar uma técnica 
 
 ## Exemplificando
 
-Usando a seguinte matriz quadrada de tamanho 6 para testar os algoritmos de busca em largura (BFS) e de busca em profundidade (DFS), podemos obter os seguintes resultados:
+Usando a seguinte matriz quadrada de tamanho 7 para testar os algoritmos de busca em largura (BFS) e de busca em profundidade (DFS), podemos obter os seguintes resultados:
 
 <table align="center">
   <tr>
@@ -112,19 +112,22 @@ Usando a seguinte matriz quadrada de tamanho 6 para testar os algoritmos de busc
 <ul>
   <li>
     <strong>Busca em profundidade (DFS):</strong>
-    <p>
-      <code>Resultados apresentados após executar o DFS</code>
+    <p align="center">
+      <img height="150rem" src="/imgs/DFSMethod.png">
     </p>
+    As posições marcadas com <code>x</code>, são as posições por onde o algoritmo passou e como visto acima, o algoritmo DFS executou 17 iterações até chegar ao final da matriz.
   </li>
   <li>
     <strong>Busca em largura (BFS):</strong>
-    <p>
-      <code>Resultados apresentados após executar o BFS</code>
+    <p align="center">
+      <img height="150rem" src="/imgs/BFSMethod.png">
     </p>
   </li>
 </ul>
 
-Lembrando que para coletar estes mesmos resultados, o usuário deverá testar os algoritmos com a mesma matriz mostrada acima.
+<strong>
+  Observação: Lembrando que para coletar estes mesmos resultados, o usuário deverá testar os algoritmos com a mesma matriz mostrada acima ou usar o arquivo <code>matrix_read.txt</code> presente no repositório.
+  </strong>
 
 ## Perguntas
 
