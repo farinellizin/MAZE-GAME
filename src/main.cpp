@@ -8,7 +8,7 @@ void run() {
         cout << endl << "----------------------------------------------------------------------------------------------";
         cout << endl << endl << "\t\t\t\t~ Welcome to the main menu ~" << endl;
         cout << endl << "\t\t\t- Select your option: " << endl;
-        cout << endl << "\t\t\t\tA. BFS | Breadth - first search;" << endl << "\t\t\t\tB. DFS | Depth - first search;" << endl;
+        cout << endl << "\t\t\t\tA. Manhattan Heuristic;" << endl << "\t\t\t\tB. Euclidean Heuristic;" << endl;
         cout << "\t\t\t\tC. Quit.";
         cout << endl << endl << "\t\t\t- Your choice: ";
         cin >> option;

@@ -107,9 +107,9 @@ void manhattan_print(Fila *f){
 	aux = f -> first -> prox;
 	
 	while (aux != NULL) {
-        cout << "Distância: " << aux -> data.distance << endl;
-        cout << "Valor em i: " << aux -> data.pos_i << endl;
-        cout << "Valor em j: " << aux -> data.pos_j << endl << endl;
+        cout << "\t\t@@\t   " << aux -> data.distance;
+        cout << "\t\t      " << aux -> data.pos_i;
+        cout << "\t\t\t    " << aux -> data.pos_j << "\t\t@@" << endl;
         aux = aux -> prox;
     }
 }
@@ -158,7 +158,6 @@ void heuristic_manhattan() {
             Enfileira(&linha, l);
             Enfileira(&coluna, c);
             manhattan_heuristic_calc(&manhattan_queue, i + 1, j);
-            //manhattan_print(&manhattan_queue);
         }
 
         if (matrix[i][j + 1] == 'A' && (j < (matrix_tam - 1))) { 
@@ -168,7 +167,6 @@ void heuristic_manhattan() {
             Enfileira(&linha, l);
             Enfileira(&coluna, c);
             manhattan_heuristic_calc(&manhattan_queue, i, j + 1);
-            //manhattan_print(&manhattan_queue);
         }
 
         if (queue_is_empty(&linha) && matrix[i - 1][j] == 'A' && (i > 0)) {
@@ -178,7 +176,6 @@ void heuristic_manhattan() {
             Enfileira(&linha, l);
             Enfileira(&coluna, c);
             manhattan_heuristic_calc(&manhattan_queue, i - 1, j);
-            //manhattan_print(&manhattan_queue);
         }
 
         Desenfileira(&linha, &l);
@@ -206,7 +203,13 @@ void heuristic_manhattan() {
     cout << "\t\t    'F' corresponds to the final position, it stands for 'Finish'." << endl;
     cout << "\t\t    All the arrows corresponds to the move made in the previous position." << endl;
 
-    cout << endl << endl;
-
+    cout << endl << endl << "\t\t\t    After the Manhattan Heuristic being applied" << endl;
+    cout << "\t\t\t\t    here's the intel gathered" << endl << endl << endl;
+    cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
+    cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl << "\t\t@@\t\t\t\t\t\t\t\t@@" << endl;
+    cout << "\t\t@@      Distance        Poisition in I        Position in J\t@@" << endl << "\t\t@@\t\t\t\t\t\t\t\t@@" << endl;
     manhattan_print(&manhattan_queue);
+    cout << "\t\t@@\t\t\t\t\t\t\t\t@@" << endl;
+    cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
+    cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
 }
