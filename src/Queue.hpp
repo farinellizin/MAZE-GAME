@@ -2,6 +2,7 @@
 #define QUEUE_HPP
 #include <iostream>
 #include <fstream>
+#include <cmath>
 
 typedef struct Item Item;
 typedef struct Block Block;
@@ -9,6 +10,12 @@ typedef struct Fila Fila;
 
 struct Item{
 	int val;
+
+	// solving using Manhattan Euristic
+
+	int distance;
+	int pos_i;
+	int pos_j;
 };
 
 struct Block{
@@ -29,6 +36,8 @@ bool queue_is_empty(Fila *f);
 
 int return_matrix_size();
 void get_matrix_values(char *vet);
-void solve();
+void heuristic_manhattan();
+void manhattan_heuristic_calc(Fila *manhattan_queue, int i, int j);
+
 
 #endif

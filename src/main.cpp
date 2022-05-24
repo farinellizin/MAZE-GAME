@@ -1,4 +1,3 @@
-#include "Pile.hpp"
 #include "Queue.hpp"
 using namespace std;
 
@@ -17,12 +16,12 @@ void run() {
 
         if (option == 'A') {
             cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
-            cout << "\t\t\t\t  ~ You chose the BFS method ~" << endl << endl;
-            solve();
+            cout << "\t\t\t      ~ You chose the Manhattan Heuristic ~" << endl << endl;
+            heuristic_manhattan();
         } else if (option == 'B') {
             cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
-            cout << "\t\t\t\t  ~ You chose the DFS method ~" << endl << endl;
-            runMatrix();
+            cout << "\t\t\t\t  ~ You chose the Euclidian Heuristic ~" << endl << endl;
+            
         } else if (option == 'C') {
             cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
             cout << "\t\t\t\t   ~ You chose to quit ~" << endl << endl;

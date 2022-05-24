@@ -89,7 +89,32 @@ void get_matrix_values(char *vet_aux) {
     file.close();
 }
 
-void solve() {
+void manhattan_heuristic_calc(Fila *manhattan_queue, int i, int j) {
+    int distance;
+    Item aux;
+
+    distance = abs(matrix_tam - i - 1) + abs(matrix_tam - j - 1);
+    aux.distance = distance;
+    aux.pos_i = i;
+    aux.pos_j = j;
+
+    Enfileira(manhattan_queue, aux);
+}
+
+void manhattan_print(Fila *f){
+	Block *aux;
+
+	aux = f -> first -> prox;
+	
+	while (aux != NULL) {
+        cout << "Distância: " << aux -> data.distance << endl;
+        cout << "Valor em i: " << aux -> data.pos_i << endl;
+        cout << "Valor em j: " << aux -> data.pos_j << endl << endl;
+        aux = aux -> prox;
+    }
+}
+
+void heuristic_manhattan() {
 	int matrix_tam = return_matrix_size(), k = 0, i, j;
     char matrix[matrix_tam][matrix_tam], vet_aux[matrix_tam*matrix_tam];
     get_matrix_values(vet_aux);
@@ -113,11 +138,12 @@ void solve() {
         cout << endl;
     }
 
-    Fila linha, coluna; 
+    Fila linha, coluna, manhattan_queue; 
     Item l, c;
     int cont = 0;
     FFVazia(&linha); 
     FFVazia(&coluna);
+    FFVazia(&manhattan_queue);
     l.val = 0;
     c.val = 0;
     cout << endl << endl;
@@ -131,6 +157,8 @@ void solve() {
             matrix[i + 1][j] = 'v';
             Enfileira(&linha, l);
             Enfileira(&coluna, c);
+            manhattan_heuristic_calc(&manhattan_queue, i + 1, j);
+            //manhattan_print(&manhattan_queue);
         }
 
         if (matrix[i][j + 1] == 'A' && (j < (matrix_tam - 1))) { 
@@ -139,6 +167,8 @@ void solve() {
             matrix[i][j + 1] = '>';
             Enfileira(&linha, l);
             Enfileira(&coluna, c);
+            manhattan_heuristic_calc(&manhattan_queue, i, j + 1);
+            //manhattan_print(&manhattan_queue);
         }
 
         if (queue_is_empty(&linha) && matrix[i - 1][j] == 'A' && (i > 0)) {
@@ -147,6 +177,8 @@ void solve() {
             matrix[i - 1][j] = '^';
             Enfileira(&linha, l);
             Enfileira(&coluna, c);
+            manhattan_heuristic_calc(&manhattan_queue, i - 1, j);
+            //manhattan_print(&manhattan_queue);
         }
 
         Desenfileira(&linha, &l);
@@ -173,4 +205,8 @@ void solve() {
     cout << endl << "\t\t    'S' corresponds to the initial position, it stands for 'Start'." << endl;
     cout << "\t\t    'F' corresponds to the final position, it stands for 'Finish'." << endl;
     cout << "\t\t    All the arrows corresponds to the move made in the previous position." << endl;
+
+    cout << endl << endl;
+
+    manhattan_print(&manhattan_queue);
 }
