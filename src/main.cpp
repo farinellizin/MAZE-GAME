@@ -31,32 +31,32 @@ void run() {
 }
 
 int main () {
-    run();
+    // run();
 
-    // Fila teste;
+    Fila teste;
     // Block *i, *j;
-    // FFVazia(&teste);
+    FFVazia(&teste);
 
-    // Item aux;
-    // aux.distance = 40;
-    // Enfileira(&teste, aux);
+    Item aux;
+    aux.euclidean_distance = 8.9;
+    Enfileira(&teste, aux);
 
-    // aux.distance = 20;
-    // Enfileira(&teste, aux);
+    aux.euclidean_distance = 2.002;
+    Enfileira(&teste, aux);
 
-    // aux.distance = 3;
-    // Enfileira(&teste, aux);
+    aux.euclidean_distance = 14.23;
+    Enfileira(&teste, aux);
 
-    // aux.distance = 51;
-    // Enfileira(&teste, aux);
+    aux.euclidean_distance = 2.2;
+    Enfileira(&teste, aux);
 
-    // aux.distance = 8;
-    // Enfileira(&teste, aux);
+    aux.euclidean_distance = 8;
+    Enfileira(&teste, aux);
 
-    // aux.distance = 2;
-    // Enfileira(&teste, aux);
+    aux.euclidean_distance = 54.23;
+    Enfileira(&teste, aux);
 
-    // manhattan_print(&teste);
+    euclidean_print(&teste);
 
     // i = teste.first -> prox;
     // // j = i -> prox;
@@ -74,6 +74,7 @@ int main () {
     //     i = i -> prox;
     // }
 
-    // cout << endl << endl << "ORGANIZANDO" << endl << endl;
-    // manhattan_print(&teste);
+    euclidean_sort(&teste);
+    cout << endl << endl << "ORGANIZANDO" << endl << endl;
+    euclidean_print(&teste);
 }

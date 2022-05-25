@@ -14,6 +14,13 @@ void Enfileira(Fila *f, Item d){
 	f -> last -> prox = NULL;
 }
 
+void swap(Block *a, Block *b){
+	Item aux;
+	aux = a -> data;
+	a -> data = b -> data;
+	b -> data = aux;
+}
+
 // void Desenfileira(Fila *f, Item *d){
 // 	Block *aux;
 
@@ -44,7 +51,7 @@ void manhattan_dequeue(Fila *f, Item *aux) {
         f -> last = f -> first;
     }
 
-    aux -> distance = tmp -> data.distance;
+    aux -> manhattan_distance = tmp -> data.manhattan_distance;
     aux -> pos_i = tmp -> data.pos_i;
     aux -> pos_j = tmp -> data.pos_j;
 }
@@ -60,12 +67,7 @@ void manhattan_dequeue(Fila *f, Item *aux) {
 // 	}
 // }
 
-void swap(Block *a, Block *b){
-	Item aux;
-	aux = a -> data;
-	a -> data = b -> data;
-	b -> data = aux;
-}
+
 
 bool queue_is_empty(Fila *f) {
     if (f -> first == f -> last || f -> first -> prox == NULL || f == NULL) {
@@ -123,7 +125,7 @@ void manhattan_sort(Fila *manhattan_queue) {
     while (i != NULL) {
         j = i -> prox;
         while (j != NULL) {
-            if (j -> data.distance < i -> data.distance) {
+            if (j -> data.manhattan_distance < i -> data.manhattan_distance) {
                 swap(i, j);
             }
             j = j -> prox;
@@ -132,17 +134,47 @@ void manhattan_sort(Fila *manhattan_queue) {
     }
 }
 
+void euclidean_sort(Fila *euclidean_queue) {
+    Block *i, *j;
+
+    i = euclidean_queue -> first -> prox;
+
+    while (i != NULL) {
+        j = i -> prox;
+        while (j != NULL) {
+            if (j -> data.euclidean_distance < i -> data.euclidean_distance) {
+                swap(i, j);
+            }
+            j = j -> prox;
+        }
+        i = i -> prox;
+    }
+}
+
 void manhattan_heuristic_calc(Fila *manhattan_queue, int i, int j) {
     int distance;
     Item aux;
 
     distance = abs(matrix_tam - i - 1) + abs(matrix_tam - j - 1);
-    aux.distance = distance;
+    aux.manhattan_distance = distance;
     aux.pos_i = i;
     aux.pos_j = j;
 
     Enfileira(manhattan_queue, aux);
     manhattan_sort(manhattan_queue);
+}
+
+void euclidean_heuristic_calc(Fila *euclidean_queue, int i, int j) {
+    float distance;
+    Item aux;
+
+    distance = sqrt(pow(abs((matrix_tam - 1) - i), 2) + pow(abs((matrix_tam - 1) - j), 2));
+    aux.euclidean_distance = distance;
+    aux.pos_i = i;
+    aux.pos_j = j;
+
+    Enfileira(euclidean_queue, aux);
+    euclidean_sort(euclidean_queue);
 }
 
 void manhattan_print(Fila *f){
@@ -151,9 +183,22 @@ void manhattan_print(Fila *f){
 	aux = f -> first -> prox;
 	
 	while (aux != NULL) {
-        cout << "\t\t@@\t   " << aux -> data.distance;
+        cout << "\t\t@@\t   " << aux -> data.manhattan_distance;
         cout << "\t\t      " << aux -> data.pos_i;
         cout << "\t\t\t    " << aux -> data.pos_j << "\t\t@@" << endl;
+        aux = aux -> prox;
+    }
+}
+
+void euclidean_print(Fila *f) {
+    Block *aux;
+
+    aux = f -> first -> prox;
+
+    while (aux != NULL) {
+        cout << "\t\t\t   " << aux -> data.euclidean_distance;
+        cout << "\t\t      " << aux -> data.pos_i;
+        cout << "\t\t\t    " << aux -> data.pos_j << "\t\t" << endl;
         aux = aux -> prox;
     }
 }
@@ -182,10 +227,11 @@ void heuristic_manhattan() {
         cout << endl;
     }
 
-    Fila manhattan_queue; 
+    Fila manhattan_queue, euclidean_queue; 
     Item aux;
     int cont = 0;
     FFVazia(&manhattan_queue);
+    FFVazia(&euclidean_queue);
     aux.pos_i = 0;
     aux.pos_j = 0;
     cout << endl << endl;
@@ -197,21 +243,21 @@ void heuristic_manhattan() {
             aux.pos_i = i + 1;
             aux.pos_j = j;
             matrix[i + 1][j] = 'v';
-            manhattan_heuristic_calc(&manhattan_queue, i + 1, j);
+            // manhattan_heuristic_calc(&manhattan_queue, i + 1, j);
         }
 
         if (matrix[i][j + 1] == 'A' && (j < (matrix_tam - 1))) { 
             aux.pos_i = i;
             aux.pos_j = j + 1;
             matrix[i][j + 1] = '>';
-            manhattan_heuristic_calc(&manhattan_queue, i, j + 1);
+            // manhattan_heuristic_calc(&manhattan_queue, i, j + 1);
         }
 
         if (queue_is_empty(&manhattan_queue) && matrix[i - 1][j] == 'A' && (i > 0)) {
             aux.pos_i = i - 1;
             aux.pos_j = j;
             matrix[i - 1][j] = '^';
-            manhattan_heuristic_calc(&manhattan_queue, i - 1, j);
+            // manhattan_heuristic_calc(&manhattan_queue, i - 1, j);
         }
 
         manhattan_dequeue(&manhattan_queue, &aux);
@@ -244,7 +290,7 @@ void heuristic_manhattan() {
     cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
     cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl << "\t\t@@\t\t\t\t\t\t\t\t@@" << endl;
     cout << "\t\t@@      Distance        Poisition in I        Position in J\t@@" << endl << "\t\t@@\t\t\t\t\t\t\t\t@@" << endl;
-    manhattan_print(&manhattan_queue);
+    // manhattan_print(&manhattan_queue);
     cout << "\t\t@@\t\t\t\t\t\t\t\t@@" << endl;
     cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
     cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
