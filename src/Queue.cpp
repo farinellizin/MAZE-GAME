@@ -14,31 +14,57 @@ void Enfileira(Fila *f, Item d){
 	f -> last -> prox = NULL;
 }
 
-void Desenfileira(Fila *f, Item *d){
-	Block *aux;
+// void Desenfileira(Fila *f, Item *d){
+// 	Block *aux;
 
-	if(f -> first == f -> last || f == NULL || f -> first -> prox == NULL){
-		//printf("FILA VAZIA!\n");
-		return;
-	}
+// 	if(f -> first == f -> last || f == NULL || f -> first -> prox == NULL){
+// 		//printf("FILA VAZIA!\n");
+// 		return;
+// 	}
 	
-	aux = f -> first -> prox;
-	f -> first -> prox = aux -> prox;
+// 	aux = f -> first -> prox;
+// 	f -> first -> prox = aux -> prox;
+//     if (f -> first -> prox == NULL) {
+//         f -> last = f -> first;
+//     }
+// 	d -> val = aux -> data.val;
+// 	free(aux);
+// }
+
+void manhattan_dequeue(Fila *f, Item *aux) {
+    Block *tmp;
+
+    if (f -> first == f -> last || f == NULL || f -> first -> prox == NULL) {
+        return;
+    }
+
+    tmp = f -> first -> prox;
+    f -> first -> prox = tmp -> prox;
     if (f -> first -> prox == NULL) {
         f -> last = f -> first;
     }
-	d -> val = aux -> data.val;
-	free(aux);
+
+    aux -> distance = tmp -> data.distance;
+    aux -> pos_i = tmp -> data.pos_i;
+    aux -> pos_j = tmp -> data.pos_j;
 }
 
-void FImprime(Fila *f){
-	Block *aux;
 
-	aux = f -> first -> prox;
-	while(aux != NULL){
-		cout << aux -> data.val << " ";
-		aux = aux -> prox;
-	}
+// void FImprime(Fila *f){
+// 	Block *aux;
+
+// 	aux = f -> first -> prox;
+// 	while(aux != NULL){
+// 		cout << aux -> data.val << " ";
+// 		aux = aux -> prox;
+// 	}
+// }
+
+void swap(Block *a, Block *b){
+	Item aux;
+	aux = a -> data;
+	a -> data = b -> data;
+	b -> data = aux;
 }
 
 bool queue_is_empty(Fila *f) {
@@ -89,6 +115,23 @@ void get_matrix_values(char *vet_aux) {
     file.close();
 }
 
+void manhattan_sort(Fila *manhattan_queue) {
+    Block *i, *j;
+
+    i = manhattan_queue -> first -> prox;
+
+    while (i != NULL) {
+        j = i -> prox;
+        while (j != NULL) {
+            if (j -> data.distance < i -> data.distance) {
+                swap(i, j);
+            }
+            j = j -> prox;
+        }
+        i = i -> prox; 
+    }
+}
+
 void manhattan_heuristic_calc(Fila *manhattan_queue, int i, int j) {
     int distance;
     Item aux;
@@ -99,6 +142,7 @@ void manhattan_heuristic_calc(Fila *manhattan_queue, int i, int j) {
     aux.pos_j = j;
 
     Enfileira(manhattan_queue, aux);
+    manhattan_sort(manhattan_queue);
 }
 
 void manhattan_print(Fila *f){
@@ -138,51 +182,43 @@ void heuristic_manhattan() {
         cout << endl;
     }
 
-    Fila linha, coluna, manhattan_queue; 
-    Item l, c;
+    Fila manhattan_queue; 
+    Item aux;
     int cont = 0;
-    FFVazia(&linha); 
-    FFVazia(&coluna);
     FFVazia(&manhattan_queue);
-    l.val = 0;
-    c.val = 0;
+    aux.pos_i = 0;
+    aux.pos_j = 0;
     cout << endl << endl;
     while (i != matrix_tam - 1 || j != matrix_tam - 1) {
-        i = l.val;
-        j = c.val;
+        i = aux.pos_i;
+        j = aux.pos_j;
 
         if (matrix[i + 1][j] == 'A' && (i < (matrix_tam - 1))){ 
-            l.val = i + 1;
-            c.val = j;
+            aux.pos_i = i + 1;
+            aux.pos_j = j;
             matrix[i + 1][j] = 'v';
-            Enfileira(&linha, l);
-            Enfileira(&coluna, c);
             manhattan_heuristic_calc(&manhattan_queue, i + 1, j);
         }
 
         if (matrix[i][j + 1] == 'A' && (j < (matrix_tam - 1))) { 
-            l.val = i;
-            c.val = j + 1;
+            aux.pos_i = i;
+            aux.pos_j = j + 1;
             matrix[i][j + 1] = '>';
-            Enfileira(&linha, l);
-            Enfileira(&coluna, c);
             manhattan_heuristic_calc(&manhattan_queue, i, j + 1);
         }
 
-        if (queue_is_empty(&linha) && matrix[i - 1][j] == 'A' && (i > 0)) {
-            l.val = i - 1;
-            c.val = j;
+        if (queue_is_empty(&manhattan_queue) && matrix[i - 1][j] == 'A' && (i > 0)) {
+            aux.pos_i = i - 1;
+            aux.pos_j = j;
             matrix[i - 1][j] = '^';
-            Enfileira(&linha, l);
-            Enfileira(&coluna, c);
             manhattan_heuristic_calc(&manhattan_queue, i - 1, j);
         }
 
-        Desenfileira(&linha, &l);
-        Desenfileira(&coluna, &c);
+        manhattan_dequeue(&manhattan_queue, &aux);
         if (i != matrix_tam-1 || j != matrix_tam-1) {
             cont++;
         }
+        // cont++;
     }
 
     matrix[0][0] = 'S'; matrix[matrix_tam - 1][matrix_tam - 1] = 'F';
@@ -203,7 +239,7 @@ void heuristic_manhattan() {
     cout << "\t\t    'F' corresponds to the final position, it stands for 'Finish'." << endl;
     cout << "\t\t    All the arrows corresponds to the move made in the previous position." << endl;
 
-    cout << endl << endl << "\t\t\t    After the Manhattan Heuristic being applied" << endl;
+    cout << endl << endl << "\t\t\t      After Manhattan Heuristic being applied" << endl;
     cout << "\t\t\t\t    here's the intel gathered" << endl << endl << endl;
     cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
     cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl << "\t\t@@\t\t\t\t\t\t\t\t@@" << endl;

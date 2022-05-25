@@ -32,4 +32,48 @@ void run() {
 
 int main () {
     run();
+
+    // Fila teste;
+    // Block *i, *j;
+    // FFVazia(&teste);
+
+    // Item aux;
+    // aux.distance = 40;
+    // Enfileira(&teste, aux);
+
+    // aux.distance = 20;
+    // Enfileira(&teste, aux);
+
+    // aux.distance = 3;
+    // Enfileira(&teste, aux);
+
+    // aux.distance = 51;
+    // Enfileira(&teste, aux);
+
+    // aux.distance = 8;
+    // Enfileira(&teste, aux);
+
+    // aux.distance = 2;
+    // Enfileira(&teste, aux);
+
+    // manhattan_print(&teste);
+
+    // i = teste.first -> prox;
+    // // j = i -> prox;
+    // // cout << "valor de i: " << i -> data.distance << endl;
+    // // cout << "valor de J: " << j -> data.distance << endl;
+
+    // while (i != NULL) {
+    //     j = i -> prox;
+    //     while (j != NULL) {
+    //         if (j -> data.distance < i -> data.distance) {
+    //             swap(i, j);
+    //         }
+    //         j = j -> prox;
+    //     }
+    //     i = i -> prox;
+    // }
+
+    // cout << endl << endl << "ORGANIZANDO" << endl << endl;
+    // manhattan_print(&teste);
 }
