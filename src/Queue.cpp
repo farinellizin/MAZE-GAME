@@ -21,23 +21,6 @@ void swap(Block *a, Block *b){
 	b -> data = aux;
 }
 
-// void Desenfileira(Fila *f, Item *d){
-// 	Block *aux;
-
-// 	if(f -> first == f -> last || f == NULL || f -> first -> prox == NULL){
-// 		//printf("FILA VAZIA!\n");
-// 		return;
-// 	}
-	
-// 	aux = f -> first -> prox;
-// 	f -> first -> prox = aux -> prox;
-//     if (f -> first -> prox == NULL) {
-//         f -> last = f -> first;
-//     }
-// 	d -> val = aux -> data.val;
-// 	free(aux);
-// }
-
 void manhattan_dequeue(Fila *f, Item *aux) {
     Block *tmp;
 
@@ -56,7 +39,6 @@ void manhattan_dequeue(Fila *f, Item *aux) {
     aux -> pos_j = tmp -> data.pos_j;
 }
 
-
 void euclidean_dequeue(Fila *f, Item *aux) {
     Block *tmp;
 
@@ -74,18 +56,6 @@ void euclidean_dequeue(Fila *f, Item *aux) {
     aux -> pos_i = tmp -> data.pos_i;
     aux -> pos_j = tmp -> data.pos_j;
 }
-
-// void FImprime(Fila *f){
-// 	Block *aux;
-
-// 	aux = f -> first -> prox;
-// 	while(aux != NULL){
-// 		cout << aux -> data.val << " ";
-// 		aux = aux -> prox;
-// 	}
-// }
-
-
 
 bool queue_is_empty(Fila *f) {
     if (f -> first == f -> last || f -> first -> prox == NULL || f == NULL) {
@@ -221,7 +191,7 @@ void euclidean_print(Fila *f) {
     }
 }
 
-void solve() {
+void solve(bool choice) {
 	int matrix_tam = return_matrix_size(), k = 0, i, j;
     char matrix[matrix_tam][matrix_tam], vet_aux[matrix_tam*matrix_tam];
     get_matrix_values(vet_aux);
@@ -253,6 +223,7 @@ void solve() {
     aux.pos_i = 0;
     aux.pos_j = 0;
     cout << endl << endl;
+    
     while (i != matrix_tam - 1 || j != matrix_tam - 1) {
         i = aux.pos_i;
         j = aux.pos_j;
@@ -261,32 +232,47 @@ void solve() {
             aux.pos_i = i + 1;
             aux.pos_j = j;
             matrix[i + 1][j] = 'v';
-            // manhattan_heuristic_calc(&manhattan_queue, i + 1, j);
-            euclidean_heuristic_calc(&euclidean_queue, i + 1, j);
+            
+            if (choice == true) {
+                manhattan_heuristic_calc(&manhattan_queue, i + 1, j);
+            } else {
+                euclidean_heuristic_calc(&euclidean_queue, i + 1, j);
+            }
         }
 
         if (matrix[i][j + 1] == 'A' && (j < (matrix_tam - 1))) { 
             aux.pos_i = i;
             aux.pos_j = j + 1;
             matrix[i][j + 1] = '>';
-            // manhattan_heuristic_calc(&manhattan_queue, i, j + 1);
-            euclidean_heuristic_calc(&euclidean_queue, i, j + 1);
+            
+            if (choice == true) {
+                manhattan_heuristic_calc(&manhattan_queue, i, j + 1);
+            } else {
+                euclidean_heuristic_calc(&euclidean_queue, i, j + 1);
+            }
         }
 
         if (queue_is_empty(&manhattan_queue) && matrix[i - 1][j] == 'A' && (i > 0)) {
             aux.pos_i = i - 1;
             aux.pos_j = j;
             matrix[i - 1][j] = '^';
-            // manhattan_heuristic_calc(&manhattan_queue, i - 1, j);
-            euclidean_heuristic_calc(&euclidean_queue, i - 1, j);
+            
+            if (choice == true) {
+                manhattan_heuristic_calc(&manhattan_queue, i - 1, j);
+            } else {
+                euclidean_heuristic_calc(&euclidean_queue, i - 1, j);
+            }
         }
 
-        // manhattan_dequeue(&manhattan_queue, &aux);
-        euclidean_dequeue(&euclidean_queue, &aux);
+        if (choice == true) {
+            manhattan_dequeue(&manhattan_queue, &aux);
+        } else {
+            euclidean_dequeue(&euclidean_queue, &aux);
+        }
+        
         if (i != matrix_tam-1 || j != matrix_tam-1) {
             cont++;
         }
-        // cont++;
     }
 
     matrix[0][0] = 'S'; matrix[matrix_tam - 1][matrix_tam - 1] = 'F';
@@ -306,14 +292,4 @@ void solve() {
     cout << endl << "\t\t    'S' corresponds to the initial position, it stands for 'Start'." << endl;
     cout << "\t\t    'F' corresponds to the final position, it stands for 'Finish'." << endl;
     cout << "\t\t    All the arrows corresponds to the move made in the previous position." << endl;
-
-    cout << endl << endl << "\t\t\t      After Manhattan Heuristic being applied" << endl;
-    cout << "\t\t\t\t    here's the intel gathered" << endl << endl << endl;
-    cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
-    cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl << "\t\t@@\t\t\t\t\t\t\t\t@@" << endl;
-    cout << "\t\t@@      Distance        Poisition in I        Position in J\t@@" << endl << "\t\t@@\t\t\t\t\t\t\t\t@@" << endl;
-    // manhattan_print(&manhattan_queue);
-    cout << "\t\t@@\t\t\t\t\t\t\t\t@@" << endl;
-    cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
-    cout << "\t\t@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@@" << endl;
 }
