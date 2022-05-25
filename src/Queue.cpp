@@ -57,6 +57,24 @@ void manhattan_dequeue(Fila *f, Item *aux) {
 }
 
 
+void euclidean_dequeue(Fila *f, Item *aux) {
+    Block *tmp;
+
+    if (f -> first == f -> last || f == NULL || f -> first -> prox == NULL) {
+        return;
+    }
+
+    tmp = f -> first -> prox;
+    f -> first -> prox = tmp -> prox;
+    if (f -> first -> prox == NULL) {
+        f -> last = f -> first;
+    }
+
+    aux -> euclidean_distance = tmp -> data.euclidean_distance;
+    aux -> pos_i = tmp -> data.pos_i;
+    aux -> pos_j = tmp -> data.pos_j;
+}
+
 // void FImprime(Fila *f){
 // 	Block *aux;
 
@@ -203,7 +221,7 @@ void euclidean_print(Fila *f) {
     }
 }
 
-void heuristic_manhattan() {
+void solve() {
 	int matrix_tam = return_matrix_size(), k = 0, i, j;
     char matrix[matrix_tam][matrix_tam], vet_aux[matrix_tam*matrix_tam];
     get_matrix_values(vet_aux);
@@ -244,6 +262,7 @@ void heuristic_manhattan() {
             aux.pos_j = j;
             matrix[i + 1][j] = 'v';
             // manhattan_heuristic_calc(&manhattan_queue, i + 1, j);
+            euclidean_heuristic_calc(&euclidean_queue, i + 1, j);
         }
 
         if (matrix[i][j + 1] == 'A' && (j < (matrix_tam - 1))) { 
@@ -251,6 +270,7 @@ void heuristic_manhattan() {
             aux.pos_j = j + 1;
             matrix[i][j + 1] = '>';
             // manhattan_heuristic_calc(&manhattan_queue, i, j + 1);
+            euclidean_heuristic_calc(&euclidean_queue, i, j + 1);
         }
 
         if (queue_is_empty(&manhattan_queue) && matrix[i - 1][j] == 'A' && (i > 0)) {
@@ -258,9 +278,11 @@ void heuristic_manhattan() {
             aux.pos_j = j;
             matrix[i - 1][j] = '^';
             // manhattan_heuristic_calc(&manhattan_queue, i - 1, j);
+            euclidean_heuristic_calc(&euclidean_queue, i - 1, j);
         }
 
-        manhattan_dequeue(&manhattan_queue, &aux);
+        // manhattan_dequeue(&manhattan_queue, &aux);
+        euclidean_dequeue(&euclidean_queue, &aux);
         if (i != matrix_tam-1 || j != matrix_tam-1) {
             cont++;
         }

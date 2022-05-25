@@ -17,7 +17,7 @@ void run() {
         if (option == 'A') {
             cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
             cout << "\t\t\t      ~ You chose the Manhattan Heuristic ~" << endl << endl;
-            heuristic_manhattan();
+            solve();
         } else if (option == 'B') {
             cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
             cout << "\t\t\t\t  ~ You chose the Euclidian Heuristic ~" << endl << endl;
@@ -31,50 +31,50 @@ void run() {
 }
 
 int main () {
-    // run();
+    run();
 
-    Fila teste;
-    // Block *i, *j;
-    FFVazia(&teste);
+    // Fila teste;
+    // // Block *i, *j;
+    // FFVazia(&teste);
 
-    Item aux;
-    aux.euclidean_distance = 8.9;
-    Enfileira(&teste, aux);
+    // Item aux;
+    // aux.euclidean_distance = 8.9;
+    // Enfileira(&teste, aux);
 
-    aux.euclidean_distance = 2.002;
-    Enfileira(&teste, aux);
+    // aux.euclidean_distance = 2.002;
+    // Enfileira(&teste, aux);
 
-    aux.euclidean_distance = 14.23;
-    Enfileira(&teste, aux);
+    // aux.euclidean_distance = 14.23;
+    // Enfileira(&teste, aux);
 
-    aux.euclidean_distance = 2.2;
-    Enfileira(&teste, aux);
+    // aux.euclidean_distance = 2.2;
+    // Enfileira(&teste, aux);
 
-    aux.euclidean_distance = 8;
-    Enfileira(&teste, aux);
+    // aux.euclidean_distance = 8;
+    // Enfileira(&teste, aux);
 
-    aux.euclidean_distance = 54.23;
-    Enfileira(&teste, aux);
+    // aux.euclidean_distance = 54.23;
+    // Enfileira(&teste, aux);
 
-    euclidean_print(&teste);
+    // euclidean_print(&teste);
 
-    // i = teste.first -> prox;
-    // // j = i -> prox;
-    // // cout << "valor de i: " << i -> data.distance << endl;
-    // // cout << "valor de J: " << j -> data.distance << endl;
+    // // i = teste.first -> prox;
+    // // // j = i -> prox;
+    // // // cout << "valor de i: " << i -> data.distance << endl;
+    // // // cout << "valor de J: " << j -> data.distance << endl;
 
-    // while (i != NULL) {
-    //     j = i -> prox;
-    //     while (j != NULL) {
-    //         if (j -> data.distance < i -> data.distance) {
-    //             swap(i, j);
-    //         }
-    //         j = j -> prox;
-    //     }
-    //     i = i -> prox;
-    // }
+    // // while (i != NULL) {
+    // //     j = i -> prox;
+    // //     while (j != NULL) {
+    // //         if (j -> data.distance < i -> data.distance) {
+    // //             swap(i, j);
+    // //         }
+    // //         j = j -> prox;
+    // //     }
+    // //     i = i -> prox;
+    // // }
 
-    euclidean_sort(&teste);
-    cout << endl << endl << "ORGANIZANDO" << endl << endl;
-    euclidean_print(&teste);
+    // euclidean_sort(&teste);
+    // cout << endl << endl << "ORGANIZANDO" << endl << endl;
+    // euclidean_print(&teste);
 }

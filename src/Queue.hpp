@@ -40,7 +40,8 @@ int return_matrix_size();
 void get_matrix_values(char *vet);
 
 
-void heuristic_manhattan();
+void solve();
+
 void manhattan_heuristic_calc(Fila *manhattan_queue, int i, int j);
 void manhattan_print(Fila *manhattan_queue);
 void manhattan_dequeue(Fila *manhattan_queue, Item *aux);
