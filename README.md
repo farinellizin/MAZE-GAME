@@ -1,3 +1,7 @@
+$$
+ x = sqrt{2 + 1}
+$$
+
 # Jogo do Labirinto
 
 ## Regras
@@ -60,10 +64,19 @@ O algoritmo A* é o resultado da junção de um algoritmo guloso chamado de heur
 
 Podemos descrever as heurísticas Euclidiana e de Manhattan como complementares uma à outra, sendo a heurística Euclidiana, o cálculo em diagonal da distância de dois pontos dentro de uma matriz, e a heurística de Manhattan, o cálculo da menor distância possível entre esses dois pontos com movimentos verticais e horizontais.
 
-A partir dessas definições, é possível chegar a conclusão que a distância percorrida pela heurística de Manhattan é igual a: <strong>d = | Δi | + | Δj |</strong>. E como dito acima, um método sendo complementar ao outro, a distância percorridas entre os mesmos dois pontos pela heurística Euclidiana é igual a: <strong>d = sqrt{ ( Δi )² + ( Δj )² }</strong>. 
+A partir dessas definições, é possível chegar a conclusão que a distância percorrida pela heurística de Manhattan é igual a: 
+
+<strong> $$ d = | Δi | + | Δj | $$ </strong>
+
+E como dito acima, um método sendo complementar ao outro, a distância percorridas entre os mesmos dois pontos pela heurística Euclidiana é igual a: 
+
+<strong>$$ d = sqrt{ ( Δi )² + ( Δj )² } $$ </strong>
+
+##
 
 <p align="center">
-  <img height="250rem" src="/imgs/caminhamento.png">
+  <img height="250rem" src="/imgs/caminhamento.png"></br>
+  <i>Imagem de exemplo de caminhamento em ruas</i>
 </p>
 
 <strong>Na imagem acima:</strong>
