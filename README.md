@@ -1,7 +1,3 @@
-$$
- x = sqrt{2 + 1}
-$$
-
 # Jogo do Labirinto
 
 ## Regras
@@ -66,11 +62,11 @@ Podemos descrever as heurísticas Euclidiana e de Manhattan como complementares 
 
 A partir dessas definições, é possível chegar a conclusão que a distância percorrida pela heurística de Manhattan é igual a: 
 
-<strong> $$ d = | Δi | + | Δj | $$ </strong>
+<strong>$$ d = | Δi | + | Δj | $$ </strong>
 
 E como dito acima, um método sendo complementar ao outro, a distância percorridas entre os mesmos dois pontos pela heurística Euclidiana é igual a: 
 
-<strong>$$ d = \sqrt{( Δi )² + ( Δj )²} $$ </strong>
+<strong>$$ d = \sqrt{( Δi )² + ( Δj )²}$$ </strong>
 
 ##
 
