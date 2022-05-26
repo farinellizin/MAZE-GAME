@@ -76,6 +76,14 @@ A partir dessas definições, é possível chegar a conclusão que a distância 
 
 Levando em consideração a linha verde como a heurística Euclidiana e as demais linhas como a heurística de Manhattan, podemos analisar na figura acima o que foi dito no parágrafo anterior, concluindo também que o Euclidiano é como se fosse uma hipotenusa de um triângulo e o Manhattan são os catetos do triângulo, e os cálculos dos mesmos são feitos da mesma forma descrita no parágrafo anterior, usando o Teorema de Pitágoras.
 
+### Exemplificando funcionamento da heurística de Manhattan
+
+      muitos códigos fodastíscos neste local
+
+### Exemplificando funcionamento da heurística Euclidiana
+
+      muitos códigos fodastíscos neste local
+
 ## Funcionamento do programa
   - É de suma importância que, para o correto funcionamento do programa, seja seguido o seguinte protocolo:
     1. O nome do arquivo esteja corretamente especificado nas linhas 35 e 52 do arquivo **_Pile.cpp_**, em file.open("nomedoseuarquivo.txt");
