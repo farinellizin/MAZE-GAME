@@ -54,6 +54,28 @@ circular no sistema DFS, descrevendo-o em ordem, da seguinte forma:
 Para que o programa não entre em um looping, foi necessário usar uma técnica de algoritmo guloso, igualando a uma barreira as posições válidas 
 e inválidas por onde passou, analisou e testou, para que não aconteça do programa voltar naquela posição e repita algum processo já testado antes.
 
+## Algoritmo A*
+
+O algoritmo A* é o resultado da junção de um algoritmo guloso chamado de heurística Euclidiana, o qual escolhe primeiro a melhor solução aparente no momento e um algoritmo de busca com custo uniforme chamado de heurística de Manhattan, cuja solução é sempre ótima.
+
+Podemos descrever as heurísticas Euclidiana e de Manhattan como complementares uma à outra, sendo a heurística Euclidiana, o cálculo em diagonal da distância de dois pontos dentro de uma matriz, e a heurística de Manhattan, o cálculo da menor distância possível entre esses dois pontos com movimentos verticais e horizontais.
+
+A partir dessas definições, é possível chegar a conclusão que a distância percorrida pela heurística de Manhattan é igual a: <strong>d = | Δi | + | Δj |</strong>. E como dito acima, um método sendo complementar ao outro, a distância percorridas entre os mesmos dois pontos pela heurística Euclidiana é igual a: <strong>d = sqrt{ ( Δi )² + ( Δj )² }</strong>. 
+
+<p align="center">
+  <img height="250rem" src="/imgs/caminhamento.png">
+</p>
+
+<strong>Na imagem acima:</strong>
+<ul>
+  <li><strong>Vermelho:</strong> Distância de Manhattan</li>
+  <li><strong>Amarelo:</strong> Distância de Manhattan</li>
+  <li><strong>Azul:</strong> Distância de Manhattan</li>
+  <li><strong>Verde:</strong> Distância Euclidiana</li>
+</ul>
+
+Levando em consideração a linha verde como a heurística Euclidiana e as demais linhas como a heurística de Manhattan, podemos analisar na figura acima o que foi dito no parágrafo anterior, concluindo também que o Euclidiano é como se fosse uma hipotenusa de um triângulo e o Manhattan são os catetos do triângulo, e os cálculos dos mesmos são feitos da mesma forma descrita no parágrafo anterior, usando o Teorema de Pitágoras.
+
 ## Funcionamento do programa
   - É de suma importância que, para o correto funcionamento do programa, seja seguido o seguinte protocolo:
     1. O nome do arquivo esteja corretamente especificado nas linhas 35 e 52 do arquivo **_Pile.cpp_**, em file.open("nomedoseuarquivo.txt");
