@@ -70,7 +70,7 @@ A partir dessas definições, é possível chegar a conclusão que a distância 
 
 E como dito acima, um método sendo complementar ao outro, a distância percorridas entre os mesmos dois pontos pela heurística Euclidiana é igual a: 
 
-<strong>$$ d = sqrt{ ( Δi )² + ( Δj )² } $$ </strong>
+<strong>$$ d = \sqrt{( Δi )² + ( Δj )²} $$ </strong>
 
 ##
 
