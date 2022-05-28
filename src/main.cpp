@@ -15,11 +15,11 @@ void a_star_menu() {
     if (option == 'A') {
         cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
         cout << "\t\t\t     ~ You chose the Manhattan Heuristic ~" << endl << endl;
-        solve(true);
+        solve(0);
     } else if (option == 'B') {
         cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
         cout << "\t\t\t     ~ You chose the Euclidean Heuristic ~" << endl << endl;
-        solve(false);
+        solve(1);
     } else if (option == 'C') {
         cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
         cout << "\t\t\t\t   ~ You chose to quit ~" << endl << endl;
@@ -43,7 +43,7 @@ void run() {
         if (option == 'A') {
             cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
             cout << "\t\t\t\t  ~ You chose the BFS method ~" << endl << endl;
-            // solve();
+            solve(2);
         } else if (option == 'B') {
             cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
             cout << "\t\t\t\t  ~ You chose the DFS method ~" << endl << endl;
@@ -57,7 +57,7 @@ void run() {
             cout << "\t\t\t\t   ~ You chose to quit ~" << endl << endl;
             cout << "----------------------------------------------------------------------------------------------" << endl << endl;
         }
-    } while (option != 'C');
+    } while (option != 'D');
 }
 
 int main () {

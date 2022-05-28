@@ -7,11 +7,28 @@ void FFVazia(Fila *f){
 	f -> first -> prox = NULL;
 }
 
-void Enfileira(Fila *f, Item d){
+void bfs_queue(Fila *f, Item d){
 	f -> last -> prox = (Block*) malloc (sizeof(Block));
 	f -> last = f -> last -> prox;
 	f -> last -> data = d;
 	f -> last -> prox = NULL;
+}
+
+void bfs_dequeue(Fila *f, Item *aux) {
+    Block *tmp;
+
+    if (f -> first == f -> last || f == NULL || f -> first -> prox == NULL) {
+        return;
+    }
+
+    tmp = f -> first -> prox;
+    f -> first -> prox = tmp -> prox;
+    if (f -> first -> prox == NULL) {
+        f -> last = f -> first;
+    }
+
+    aux -> pos_i = tmp -> data.pos_i;
+    aux -> pos_j = tmp -> data.pos_j;
 }
 
 void swap(Block *a, Block *b){
@@ -19,6 +36,22 @@ void swap(Block *a, Block *b){
 	aux = a -> data;
 	a -> data = b -> data;
 	b -> data = aux;
+}
+
+bool queue_is_empty(Fila *f) {
+    if (f -> first == f -> last || f -> first -> prox == NULL || f == NULL) {
+        return true; 
+    } else {
+        return false;
+    }
+}
+
+bool all_queues_empty(Fila *bfs_queue, Fila *manhattan_queue, Fila *euclidean_queue) {
+    if (queue_is_empty(bfs_queue) && queue_is_empty(manhattan_queue) && queue_is_empty(euclidean_queue)) {
+        return true;
+    } else {
+        return false;
+    }
 }
 
 void manhattan_dequeue(Fila *f, Item *aux) {
@@ -55,14 +88,6 @@ void euclidean_dequeue(Fila *f, Item *aux) {
     aux -> euclidean_distance = tmp -> data.euclidean_distance;
     aux -> pos_i = tmp -> data.pos_i;
     aux -> pos_j = tmp -> data.pos_j;
-}
-
-bool queue_is_empty(Fila *f) {
-    if (f -> first == f -> last || f -> first -> prox == NULL || f == NULL) {
-        return true; 
-    } else {
-        return false;
-    }
 }
 
 int return_matrix_size() {
@@ -148,7 +173,7 @@ void manhattan_heuristic_calc(Fila *manhattan_queue, int i, int j) {
     aux.pos_i = i;
     aux.pos_j = j;
 
-    Enfileira(manhattan_queue, aux);
+    bfs_queue(manhattan_queue, aux);
     manhattan_sort(manhattan_queue);
 }
 
@@ -161,37 +186,37 @@ void euclidean_heuristic_calc(Fila *euclidean_queue, int i, int j) {
     aux.pos_i = i;
     aux.pos_j = j;
 
-    Enfileira(euclidean_queue, aux);
+    bfs_queue(euclidean_queue, aux);
     euclidean_sort(euclidean_queue);
 }
 
-void manhattan_print(Fila *f){
-	Block *aux;
+// void manhattan_print(Fila *f){
+// 	Block *aux;
 
-	aux = f -> first -> prox;
+// 	aux = f -> first -> prox;
 	
-	while (aux != NULL) {
-        cout << "\t\t@@\t   " << aux -> data.manhattan_distance;
-        cout << "\t\t      " << aux -> data.pos_i;
-        cout << "\t\t\t    " << aux -> data.pos_j << "\t\t@@" << endl;
-        aux = aux -> prox;
-    }
-}
+// 	while (aux != NULL) {
+//         cout << "\t\t@@\t   " << aux -> data.manhattan_distance;
+//         cout << "\t\t      " << aux -> data.pos_i;
+//         cout << "\t\t\t    " << aux -> data.pos_j << "\t\t@@" << endl;
+//         aux = aux -> prox;
+//     }
+// }
 
-void euclidean_print(Fila *f) {
-    Block *aux;
+// void euclidean_print(Fila *f) {
+//     Block *aux;
 
-    aux = f -> first -> prox;
+//     aux = f -> first -> prox;
 
-    while (aux != NULL) {
-        cout << "\t\t\t   " << aux -> data.euclidean_distance;
-        cout << "\t\t      " << aux -> data.pos_i;
-        cout << "\t\t\t    " << aux -> data.pos_j << "\t\t" << endl;
-        aux = aux -> prox;
-    }
-}
+//     while (aux != NULL) {
+//         cout << "\t\t\t   " << aux -> data.euclidean_distance;
+//         cout << "\t\t      " << aux -> data.pos_i;
+//         cout << "\t\t\t    " << aux -> data.pos_j << "\t\t" << endl;
+//         aux = aux -> prox;
+//     }
+// }
 
-void solve(bool choice) {
+void solve(int choice) {
 	int matrix_tam = return_matrix_size(), k = 0, i, j;
     char matrix[matrix_tam][matrix_tam], vet_aux[matrix_tam*matrix_tam];
     get_matrix_values(vet_aux);
@@ -215,11 +240,12 @@ void solve(bool choice) {
         cout << endl;
     }
 
-    Fila manhattan_queue, euclidean_queue; 
+    Fila manhattan_queue, euclidean_queue, default_bfs_queue; 
     Item aux;
     int cont = 0;
     FFVazia(&manhattan_queue);
     FFVazia(&euclidean_queue);
+    FFVazia(&default_bfs_queue);
     aux.pos_i = 0;
     aux.pos_j = 0;
     cout << endl << endl;
@@ -233,10 +259,12 @@ void solve(bool choice) {
             aux.pos_j = j;
             matrix[i + 1][j] = 'v';
             
-            if (choice == true) {
+            if (choice == 0) {
                 manhattan_heuristic_calc(&manhattan_queue, i + 1, j);
-            } else {
+            } else if (choice == 1) {
                 euclidean_heuristic_calc(&euclidean_queue, i + 1, j);
+            } else {
+                bfs_queue(&default_bfs_queue, aux);
             }
         }
 
@@ -245,29 +273,35 @@ void solve(bool choice) {
             aux.pos_j = j + 1;
             matrix[i][j + 1] = '>';
             
-            if (choice == true) {
+            if (choice == 0) {
                 manhattan_heuristic_calc(&manhattan_queue, i, j + 1);
-            } else {
+            } else if (choice == 1) {
                 euclidean_heuristic_calc(&euclidean_queue, i, j + 1);
+            } else {
+                bfs_queue(&default_bfs_queue, aux);
             }
         }
 
-        if (queue_is_empty(&manhattan_queue) && matrix[i - 1][j] == 'A' && (i > 0)) {
+        if (all_queues_empty(&default_bfs_queue, &manhattan_queue, &euclidean_queue) && matrix[i - 1][j] == 'A' && (i > 0)) {    
             aux.pos_i = i - 1;
             aux.pos_j = j;
             matrix[i - 1][j] = '^';
             
-            if (choice == true) {
+            if (choice == 0) {
                 manhattan_heuristic_calc(&manhattan_queue, i - 1, j);
-            } else {
+            } else if (choice == 1) {
                 euclidean_heuristic_calc(&euclidean_queue, i - 1, j);
+            } else {
+                bfs_queue(&default_bfs_queue, aux);
             }
         }
 
-        if (choice == true) {
+        if (choice == 0) {
             manhattan_dequeue(&manhattan_queue, &aux);
-        } else {
+        } else if (choice == 1) {
             euclidean_dequeue(&euclidean_queue, &aux);
+        } else {
+            bfs_dequeue(&default_bfs_queue, &aux);
         }
         
         if (i != matrix_tam-1 || j != matrix_tam-1) {

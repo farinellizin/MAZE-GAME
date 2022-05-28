@@ -30,25 +30,25 @@ struct Fila{
 };
 
 void FFVazia(Fila *f);
-void Enfileira(Fila *f, Item d);
-void Desenfileira(Fila *f, Item *d);
+void bfs_queue(Fila *f, Item d);
+void bfs_dequeue(Fila *f, Item *aux);
 void FImprime(Fila *f);
 void swap(Block *a, Block *b);
 bool queue_is_empty(Fila *f);
 
 int return_matrix_size();
 void get_matrix_values(char *vet);
+bool all_queues_empty(Fila *bfs_queue, Fila *manhattan_queue, Fila *euclidean_queue);
 
-
-void solve(bool choice);
+void solve(int choice);
 
 void manhattan_heuristic_calc(Fila *manhattan_queue, int i, int j);
-void manhattan_print(Fila *manhattan_queue);
+// void manhattan_print(Fila *manhattan_queue);
 void manhattan_dequeue(Fila *manhattan_queue, Item *aux);
 void manhattan_sort(Fila *manhattan_queue);
 
 void euclidean_heuristic_calc(Fila *euclidean_queue, int i, int j);
-void euclidean_print(Fila *euclidean_queue);
+// void euclidean_print(Fila *euclidean_queue);
 void euclidean_dequeue(Fila *euclidean_queue, Item *aux);
 void euclidean_sort(Fila *euclidean_queue);
 
