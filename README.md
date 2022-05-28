@@ -126,9 +126,446 @@ $$d_B = |Δi|+|Δj| \quad → \quad d_B = |i_f - i_a| + |j_f - j_a| \quad → \q
 $$d_A = d_B$$
 Podemos concluir que o valor de A é igual ao valor de B e, impreterivelmente, em todas as situações que a conjuntura acima ocorrer, o código optará por seguir o caminho que desde o início foi seu principal - no caso da implementação disponibilizada neste repositório, sempre optará por avançar uma linha, ao invés de caminhar uma posição com a coluna.
 
-### Exemplificando funcionamento da heurística Euclidiana
+#### Exemplificando o funcionamento da Heurística de Manhattan
 
-      muitos códigos fodastíscos neste local
+<p align="center">
+  <img height="250rem" src="/imgs/ManhattanMethod.png"></br>
+  <i> Na imagem acima, as posições demarcadas pela cor verde representam as posições pelas quais o código passou e optou por utilizá-la para      continuar, enquanto as em vermelho são posições pelas quais o programa passou, porem optou por não seguir por elas - Exemplificando o que      foi supracitado, sempre a preferência por avançar por linhas, não por colunas. 
+  </i>
+</p>
+
+#### Dissecando o código responsável por realizar a Heurística de Manhattan
+
+- A prióri, foi feita a Estruturação de uma **_Fila Dinâmica_**, contendo três parâmetros:
+   1. *_manhattan_distance_*: variável do tipo inteiro, responsável por armazenar as distâncias calculadas por meio da equação anteriomente referida;
+   2. *_pos_i_*: variável do tipo inteiro, responsável por armazenar os valores de todas as posições **_i_** Enfileiradas;
+   3. *_pos_j_*: variável do tipo inteiro, responsável por armazenar os valores de todas as posições **_j_** Enfileiradas.
+
+``` c++
+typedef struct Item Item;
+typedef struct Block Block;
+typedef struct Fila Fila;
+
+struct Item{
+	int manhattan_distance;
+	int pos_i;
+	int pos_j;
+};
+
+struct Block{
+	Item data;
+	Block *prox;
+};
+
+struct Fila{
+	Block *first;
+	Block *last;
+};
+```
+- Na sequência, foi declarada e feita vazia uma Fila responsável por armazenar todas as informações necessárias referentes à resolução da proposta, dentro da função **_solve_**, a qual junta todos os métodos de resolução referentes ao BFS: 
+   
+```c++
+Fila manhattan_queue;
+FFVazia(&manhattan_queue);
+```
+
+- Posteriormente, foi utilizada a variável *_aux_* do tipo **Item**, cujo propósito é fazer a comunicação entre os retornos de determinadas funções, repassando seus valores para as variáveis de controle de posição do tipo **Inteiro** *_i_* e *_j_*: 
+
+```c++
+Item aux;
+
+aux.pos_i = 0;
+aux.pos_j = 0;
+
+i = aux.pos_i;
+j = aux.pos_j;
+```
+
+- Após os passos anteriores, criou-se um looping do tipo **while**, tendo como comando, funcionar até que as variáveis de controle não chegassem ao fim da Matriz, implementado da seguinte forma: 
+
+```c++
+while (i != matrix_tam - 1 || j != matrix_tam - 1) {
+      .
+      .
+      .
+}
+```
+A partir do presente momento, deve-se ter em mente que todas as situações aqui denotadas se encontram presentes dentro do recém salientado looping;
+
+- $_1$ Como pontapé inicial, deve ser salientado que essa é a cabeça do looping, que é diretamente dependente de seu fim, posteriormente explicado. A partir do que foi notificado, *_i_* e *_j_* recebem os respectivos valores que serão, na cauda do looping, Desenfileirados da Fila, auxiliados por *_aux_*:
+
+```c++
+i = aux.pos_i;
+j = aux.pos_j;
+```
+- Tendo obtidos os valores de análise e temporariamente salvos, é iniciada a análise por meio de uma sequência de três condicionais *_if_*:
+   - A primeira condicional é responsável por analisar se o caminhamento pode ser feito para a linha de baixo, por meio da seguite lógica:
+     - Se a posição [ i + 1 ][ j ] for igual a 'A', quer dizer que não há uma barreira na mesma, logo, é uma posição que será analisada          posteriormente e, para tal, é necessário que ela seja enfileirada;
+     - Há também a necessidade de cumprir uma segunda verificação, sendo que *_i_* precise ser menor do que o tamanho da Matriz - 1, uma vez que, como será somado um à variável, é necessário verificar se, nessa soma, o valor de *_i_* não extrapolará o limite de tamanho da Matriz.
+     - Como forma de identificação, é marcado o movimento que aconteceu na posição por meio do caractere 'v', indicando que se moveu para posição abaixo;
+     - Em seguida, é chamada a função **_manhattan_heuristic_calc()_**, que recebe o endereço de uma Fila, juntamente aos valores de *_i_* e *_j_* que serão armazenados armazenados à fila cujo endereço foi passado;
+     - Não é possível visualizar uma função que realize a ordenação da Fila, a qual é responsável pela diferença no uso da Heurística de Manhattan para o BFS e somente o BFS. Isso se dá pelo fato de que a função responsável por tal ação se encontra dentro da supracita função, que será posteriormente explicada.
+     - Não é possível visualizar uma função que realiza o Enfileiramento, isso pelo fato de que a função responsável por tal ação está dentro da supracitada função, a qual será explicada posteriormente.
+   
+   ```c++
+   if (matrix[i + 1][j] == 'A' && (i < (matrix_tam - 1))) {
+       matrix[i + 1][j] = 'v';
+       manhattan_heuristic_calc(&manhattan_queue, i + 1, j);
+   }
+   ```
+  - A segunda condicional é responsável por analisar se o caminhamento pode ser feito para a coluna à direita, por meio da seguite lógica:
+     - Se a posição [ i ][ j + 1 ] for igual a 'A', quer dizer que não há uma barreira na mesma, logo, é uma posição que será analisada          posteriormente e, para tal, é necessário que ela seja enfileirada;
+     - Há também a necessidade de cumprir uma segunda verificação, sendo que *_j_* precise ser menor do que o tamanho da Matriz - 1, uma vez que, como será somado um à variável, é necessário verificar se, nessa soma, o valor de *_j_* não extrapolará o limite de tamanho da Matriz.
+     - Como forma de identificação, é marcado o movimento que aconteceu na posição por meio do caractere '>', indicando que se moveu para posição à direita;
+     - Em seguida, é chamada a função **_manhattan_heuristic_calc()_**, que recebe o endereço de uma Fila, juntamente aos valores de *_i_* e *_j_* que serão armazenados armazenados à fila cujo endereço foi passado;
+     - Não é possível visualizar uma função que realize a ordenação da Fila, a qual é responsável pela diferença no uso da Heurística de Manhattan para o BFS e somente o BFS. Isso se dá pelo fato de que a função responsável por tal ação se encontra dentro da supracita função, que será posteriormente explicada.
+     - Não é possível visualizar uma função que realiza o Enfileiramento, isso pelo fato de que a função responsável por tal ação está dentro da supracitada função, a qual será explicada posteriormente.
+   
+   ```c++
+   if (matrix[i][j + 1] == 'A' && (j < (matrix_tam - 1))) { 
+       matrix[i][j + 1] = '>';
+       manhattan_heuristic_calc(&manhattan_queue, i, j + 1);
+   }
+   ```
+   
+  - Por fim, a última condicional é utilizada como forma de ação extrema, e será chamada somente caso não haja nenhuma outra opção de movimento, exceto subir (claro, considerando que movimentos à esquerda jamais acontecerão no BFS), e é dada por meio da seguinte lógica:
+     - Por ser uma medida extrema, essa condicional somente entrará em vigor caso a fila esteja vazia, o que significaria que não há mais nenhuma forma de tentar os caminhos convencionais, (abaixo e à direita) e, para tal situação, é aberta essa exceção. A verificação quanto à vacuidade da Fila se dá pela função **_all_queues_empty()_**, que será detalhada subsecutivamente;
+     - Se a posição [ i - 1 ][ j ] for igual a 'A', quer dizer que não há uma barreira na mesma, logo, é uma posição que será analisada          posteriormente e, para tal, é necessário que ela seja enfileirada;
+     - Há também a necessidade de cumprir uma terceira verificação, sendo que *_i_* precise ser maior que 0, uma vez que, como será subtraído um à variável, é necessário verificar se, nessa subtração, o valor de *_i_* não extrapolará o limite de tamanho mínimo da Matriz (0).
+     - Como forma de identificação, é marcado o movimento que aconteceu na posição por meio do caractere '^', indicando que se moveu para posição acima;
+     - Em seguida, é chamada a função **_manhattan_heuristic_calc()_**, que recebe o endereço de uma Fila, juntamente aos valores de *_i_* e *_j_* que serão armazenados armazenados à fila cujo endereço foi passado;
+     - Não é possível visualizar uma função que realize a ordenação da Fila, a qual é responsável pela diferença no uso da Heurística de Manhattan para o BFS e somente o BFS. Isso se dá pelo fato de que a função responsável por tal ação se encontra dentro da supracita função, que será posteriormente explicada.
+     - Não é possível visualizar uma função que realiza o Enfileiramento, isso pelo fato de que a função responsável por tal ação está dentro da supracitada função, a qual será explicada posteriormente.
+   
+   ```c++
+   if (all_queues_empty(&default_bfs_queue, &manhattan_queue, &euclidean_queue) && matrix[i - 1][j] == 'A' && (i > 0)) { 
+       matrix[i - 1][j] = '^';
+       manhattan_heuristic_calc(&manhattan_queue, i - 1, j);
+   }
+   ```
+
+- Ao realizar todas as verificações sobreditas, é realizado o Desenfileiramento, utilizando a função **_manhattan_dequeue()_**, que puxará bloco de informações presentes na primeira posição da Fila, utilizando o endereço da variável de intermédio *_aux_*. Após tal ação, o contador de iterações é somado (+1), e o looping, qua atualmente está na cauda, volta à cabeça, conectando o que foi realizado nesta etapa (Desenfileiramento em *_aux_*), passando os valores de *_aux_* para suas respectivas variáveis:
+
+ ```c++
+manhattan_dequeue(&manhattan_queue, &aux);
+// Fim do looping
+.
+.
+.
+// Início do looping
+i = aux.pos_i;
+j = aux.pos_j;
+```
+#### A função *_manhattan_heuristic_calc(Fila *manhattan_queue, int i, int j)_*
+Utilizada em todos as condicionais, a função é de suma importância para o devido funcionamento do código, haja visto que, nela será calculada a distância *_d_*, mencionada no início do tópico.
+Ela receberá três parâmetros:
+  - 1º Parâmetro: endereço de uma fila na qual os valores serão armazenados;
+  - 2º Parâmetro: valor de *_i_*, o qual será essencial para o cálculo da distância, além de ser armazenado como uma possível posição a ser analisada;
+  - 3º Parametro: valor de *_j_*, o qual será essencial para o cálculo da distância, além de ser armazenado como uma possível posição a ser analisada.
+
+Para o cálculo da distância, haja visto que a questão exige o módulo da subtração, foi utilizada a função built-in **_abs()_**, a qual faz referência ao valor absoluto, que pode também ser visto como módulo: 
+
+```c++
+int distance = abs(matrix_tam - i - 1) + abs(matrix_tam - j - 1);
+```
+
+Na sequência, é necessário passar todos os valores que se deseja Enfileirar dentro de uma **Auxiliar** do tipo **Item**, a qual será, mais uma vez, chamada de *_aux_*, sendo responsável por fazer a comunicação dos valores com a fila:
+
+``` c++
+aux.manhattan_distance = distance;
+aux.pos_i = i;
+aux.pos_j = j;
+```
+
+Por fim, o valor é Enfileirado, por meio da função **_bfs_queue()_**, e logo em seguida, a Fila é ordenada na chamada da função **_manhattan_sort()_** (detalhado em ato contínuo). Finalmente, esse é o corpo final da função:
+
+```c++
+void manhattan_heuristic_calc(Fila *manhattan_queue, int i, int j) {
+     int distance;
+     Item aux;
+
+     distance = abs(matrix_tam - i - 1) + abs(matrix_tam - j - 1);
+     aux.manhattan_distance = distance;
+     aux.pos_i = i;
+     aux.pos_j = j;
+
+     bfs_queue(manhattan_queue, aux);
+     manhattan_sort(manhattan_queue);
+}
+```
+
+#### A função *_manhattan_sort(Fila *manhattan_queue)_*
+Essencial para o correto funcionamento da Heurística de Manhattan, na supramencionada função, foi utilizado o método de ordenação **BubbleSort**, adpatado somenta para a ordenação de **Filas Dinâmicas**.
+
+Inicialmente, foram criados dois **Blocos Auxiliares**, sendo eles ***i** e ***j**, responsáveis por determinar os limites do looping.
+Assim como no **Método da Bolha** convencional, **i** começa do início do conjunto de valores, nesse caso, no início da fila, enquanto **j** sempre começará de **i + 1**, a fim de evitar repetições nas comparações, ambos controlados por loopings **while**, recebendo como parâmetro a ordem de rodar enquanto **i for diferente de NULO** para o primeiro looping, e enquanto **j for diferente de NULO** para o segundo looping. Caso fosse necessário ocorrer a troca de valores (o que se é esperado), foi utilizada a função **_swap_**, a fim de deixar o looping mais limpo. Ao fim, a função tomou o seguinte corpo:
+
+```c++
+void manhattan_sort(Fila *manhattan_queue) {
+     Block *i, *j;
+
+     i = manhattan_queue -> first -> prox;
+
+     while (i != NULL) {
+         j = i -> prox;
+         while (j != NULL) {
+             if (j -> data.manhattan_distance < i -> data.manhattan_distance) {
+                 swap(i, j);de Manhattan
+             }
+             j = j -> prox;
+         }
+         i = i -> prox; 
+     }
+}
+```
+<p align="center">
+  Finalizada toda a contextualização por trás da Heurística de Manhattan
+</p>
+
+### Funcionamento da Heurística Euclidiana
+
+Inicialmente, vale salientar que a teoria utilizada para a resolução do BFS utilizando este método teve sua origem na matemática, sendo definida como a distância entre dois pontos, validáda pelo Teorema de Pitágoras e, devido a tal fato, pode-se perceber uma tremenda semelhança entre ambas as equações. A partir disso, podemos utilizar o mesmo conceito para realizar o caminhamento em uma Matriz de tamanho NxN, considerando que cada uma das posições dela serão como um ponto.
+
+Para, de fato, implementar a teoria ao código, faz-se necessário dissecar a equação previamente estabelecida:
+   - Como *_Δi_*, podemos entender que a variação pode ser descrita como **$i_f - i_a$**, sendo $i_f$ a linha final da matriz, a qual sempre
+   será $MatrixTam - 1$, enquanto $i_a$ será o valor de **_i_** na atual posição constatada.
+      - Exemplificando, se tivermos uma matriz de tamanho **_7_**, o primeiro cálculo para *_Δi_* será dado por $(6 - 0)$, isto devido à forma
+      que a linguagem C/C++ interpreta posições de array, começando sempre do 0 e indo até o $TamanhoMáximo - 1$, ou seja, 6.
+   - Para *_Δj_*, a variação seguirá a mesma proposta, **$j_f - j_a$**, sendo $j_f$ a coluna final da matriz, a qual, assim como anteriormente
+   detalhado, será $MatrixTam - 1$, enquanto $j_a$ será o valor de **_j_** na atual posição constatada.
+   
+Tendo isso em mente, a indagação de como esse tipo de cálculo pode interferir na forma com a qual o código se comporta é realizada, isto é, 
+de que forma usar a Heurística Euclidiana poderá se diferenciar de utilizar o BFS em sua configuração default?
+   - Bom, a resposta para tal questionamento é relativamente complexa, porém, uma vez compreendida, não haverá mais problemas para compreender
+   o restante, uma vez que ela se comportará da mesma forma por toda a execução.
+
+Tendo isso em mente, a indagação de como esse tipo de cálculo pode interferir na forma com a qual o código se comporta é realizada, isto é, 
+de que forma usar a Heurística de Manhattan poderá se diferenciar de utilizar o BFS em sua configuração default?
+   - Bom, a resposta para tal questionamento é relativamente complexa, porém, uma vez compreendida, não haverá mais problemas para compreender
+   o restante, uma vez que ela se comportará da mesma forma por toda a execução.
+
+#### Algoritmo
+
+1. Iniciar das posições **_i = 0_** e **_j = 0_**, as quais definem a posição inicial da Matriz;
+2. Verificar a possibilidade de caminhamento para direita e para baixo, de forma idêntica ao BFS comum;
+3. Caso a posição esteja livre para caminhar:
+    - Será realizado o cálculo da distância entre o atual ponto até o ponto final, utilizando a equação $d = \sqrt{(Δi)²+(Δj)²}$
+    - Sendo esse cálculo realizado, tanto as coordenadas **_i_** e **_j_**, quanto a distância **_d_** serão enfileiradas;
+    - Logo após essa *_"atualização"_* na fila, ela deve ser ordenada de acordo com o valor das distâncias, sempre em ordem crescente.
+4. Desenfileirar o primeiro valor da Fila;
+5. Atribuir aos valores de **_i_** e **_j_**, os respectivos valores que acabaram de ser Desenfileirados;
+6. Repetir todo o processo de **2 a 5** até que **_i_** e **_j_** antinjam o valor desejado ($i = MatrixTam - 1$ e $j = MatrixTam - 1$) 
+
+#### Dissecando a Heurística Euclidiana
+
+A partir do **_Algoritmo_** apresentado, vale salientar que tal método utilizará do mesmo conceito de caminhamento do BFS para si, porém, seu diferencial se dá no processo presente no **Item 3** do tópico **Algoritmo**, mas por qual motivo?
+
+Inicialmente, deve-se compreender que, na *_Estrutura de Dados do tipo Fila_*, todos os valores são inseridos no final e são removidos do início. Levando tal característica em consideração, é plausível realizar a analogia que o primeiro valor da supracitada estrutura tem "prioridade", a qual será usada a favor do algoritmo como forma de dar prioridade à determinados valores;
+
+Visando a necessidade de a todo momento procurar a menor distância, compreende-se que os valores "priorizados" devem ser as posições as quais
+apresentam menor longinquidade à posição final e, devido à isso, o **Item 3.3** do tópico **Algoritmo** especifica que a ordenação deve ser dos menores valores aos maiores. Isso porque, devido ao fato de constantemente Desenfileirar valores a fim de realizar as novas análises, após realizar o processo para a Fila ordenada, serão captadas sempre as coordenadas indexadas à menor distância, sendo os valores mais longínquos temporariamente ignorados, assim sendo enquanto forem Enfileirados valores mais aproximados do fim. Ainda há de se salientar que, para situações como nas posições [0][1]$_A$ e [1][0]$_B$, realizando os devidos cálculos, utilizando como exemplo uma matriz quadrada de tamanho 7:
+$$d_A = \sqrt{(Δi)²+(Δj)²} \quad → \quad d_A = \sqrt{(i_f - i_a)²+(j_f - j_a)²} \quad → \quad d_A = \sqrt{(6 - 0)²+(6 - 1)²} \quad → \quad d_A = \sqrt{36 + 25} \quad → \quad d_A = \sqrt{61} \quad → \quad d_A = 8,48$$
+$$d_B = \sqrt{(Δi)²+(Δj)²} \quad → \quad d_B = \sqrt{(i_f - i_a)²+(j_f - j_a)²} \quad → \quad d_B = \sqrt{(6 - 1)²+(6 - 0)²} \quad → \quad d_B = \sqrt{25 + 36} \quad → \quad d_B = \sqrt{61} \quad → \quad d_B = 8,48$$
+$$d_A = d_B$$
+
+Podemos concluir que o valor de A é igual ao valor de B e, impreterivelmente, em todas as situações que a conjuntura acima ocorrer, o código optará por seguir o caminho que desde o início foi seu principal - no caso da implementação disponibilizada neste repositório, sempre optará por avançar uma linha, ao invés de caminhar uma posição com a coluna.
+
+#### Exemplificando o funcionamento da Heurística Euclidiana
+
+<p align="center">
+  <img height="250rem" src="/imgs/EuclideanMethod.png"></br>
+  <i> Na imagem acima, as posições demarcadas pela cor verde representam as posições pelas quais o código passou e optou por utilizá-la para      continuar, enquanto as em vermelho são posições pelas quais o programa passou, porem optou por não seguir por elas - Exemplificando o que      foi supracitado, sempre a preferência por avançar por linhas, não por colunas. 
+  </i>
+</p>
+
+#### Dissecando o código responsável por realizar a Heurística de Manhattan
+
+- A prióri, foi feita a Estruturação de uma **_Fila Dinâmica_**, contendo três parâmetros:
+   1. *_euclidean_distance_*: variável do tipo float, responsável por armazenar as distâncias calculadas por meio da equação anteriomente referida;
+   2. *_pos_i_*: variável do tipo inteiro, responsável por armazenar os valores de todas as posições **_i_** Enfileiradas;
+   3. *_pos_j_*: variável do tipo inteiro, responsável por armazenar os valores de todas as posições **_j_** Enfileiradas.
+
+``` c++
+typedef struct Item Item;
+typedef struct Block Block;
+typedef struct Fila Fila;
+
+struct Item{
+	int pos_i;
+	int pos_j;
+	float euclidean_distance;
+};
+
+struct Block{
+	Item data;
+	Block *prox;
+};
+
+struct Fila{
+	Block *first;
+	Block *last;
+};
+```
+- Na sequência, foi declarada e feita vazia uma Fila responsável por armazenar todas as informações necessárias referentes à resolução da proposta, dentro da função **_solve_**, a qual junta todos os métodos de resolução referentes ao BFS: 
+   
+```c++
+Fila euclidean_queue;
+FFVazia(&euclidean_queue);
+```
+
+- Posteriormente, foi utilizada a variável *_aux_* do tipo **Item**, cujo propósito é fazer a comunicação entre os retornos de determinadas funções, repassando seus valores para as variáveis de controle de posição do tipo **Inteiro** *_i_* e *_j_*: 
+
+```c++
+Item aux;
+
+aux.pos_i = 0;
+aux.pos_j = 0;
+
+i = aux.pos_i;
+j = aux.pos_j;
+```
+
+- Após os passos anteriores, criou-se um looping do tipo **while**, tendo como comando, funcionar até que as variáveis de controle não chegassem ao fim da Matriz, implementado da seguinte forma: 
+
+```c++
+while (i != matrix_tam - 1 || j != matrix_tam - 1) {
+      .
+      .
+      .
+}
+```
+A partir do presente momento, deve-se ter em mente que todas as situações aqui denotadas se encontram presentes dentro do recém salientado looping;
+
+- $_1$ Como pontapé inicial, deve ser salientado que essa é a cabeça do looping, que é diretamente dependente de seu fim, posteriormente explicado. A partir do que foi notificado, *_i_* e *_j_* recebem os respectivos valores que serão, na cauda do looping, Desenfileirados da Fila, auxiliados por *_aux_*:
+
+```c++
+i = aux.pos_i;
+j = aux.pos_j;
+```
+- Tendo obtidos os valores de análise e temporariamente salvos, é iniciada a análise por meio de uma sequência de três condicionais *_if_*:
+   - A primeira condicional é responsável por analisar se o caminhamento pode ser feito para a linha de baixo, por meio da seguite lógica:
+     - Se a posição [ i + 1 ][ j ] for igual a 'A', quer dizer que não há uma barreira na mesma, logo, é uma posição que será analisada          posteriormente e, para tal, é necessário que ela seja enfileirada;
+     - Há também a necessidade de cumprir uma segunda verificação, sendo que *_i_* precise ser menor do que o tamanho da Matriz - 1, uma vez que, como será somado um à variável, é necessário verificar se, nessa soma, o valor de *_i_* não extrapolará o limite de tamanho da Matriz.
+     - Como forma de identificação, é marcado o movimento que aconteceu na posição por meio do caractere 'v', indicando que se moveu para posição abaixo;
+     - Em seguida, é chamada a função **_euclidean_heuristic_calc()_**, que recebe o endereço de uma Fila, juntamente aos valores de *_i_* e *_j_* que serão armazenados armazenados à fila cujo endereço foi passado;
+     - Não é possível visualizar uma função que realize a ordenação da Fila, a qual é responsável pela diferença no uso da Heurística Euclidiana para o BFS e somente o BFS. Isso se dá pelo fato de que a função responsável por tal ação se encontra dentro da supracita função, que será posteriormente explicada.
+     - Não é possível visualizar uma função que realiza o Enfileiramento, isso pelo fato de que a função responsável por tal ação está dentro da supracitada função, a qual será explicada posteriormente.
+   
+   ```c++
+   if (matrix[i + 1][j] == 'A' && (i < (matrix_tam - 1))) {
+       matrix[i + 1][j] = 'v';
+       euclidean_heuristic_calc(&euclidean_queue, i + 1, j);
+   }
+   ```
+  - A segunda condicional é responsável por analisar se o caminhamento pode ser feito para a coluna à direita, por meio da seguite lógica:
+     - Se a posição [ i ][ j + 1 ] for igual a 'A', quer dizer que não há uma barreira na mesma, logo, é uma posição que será analisada          posteriormente e, para tal, é necessário que ela seja enfileirada;
+     - Há também a necessidade de cumprir uma segunda verificação, sendo que *_j_* precise ser menor do que o tamanho da Matriz - 1, uma vez que, como será somado um à variável, é necessário verificar se, nessa soma, o valor de *_j_* não extrapolará o limite de tamanho da Matriz.
+     - Como forma de identificação, é marcado o movimento que aconteceu na posição por meio do caractere '>', indicando que se moveu para posição à direita;
+     - Em seguida, é chamada a função **_euclidean_heuristic_calc()_**, que recebe o endereço de uma Fila, juntamente aos valores de *_i_* e *_j_* que serão armazenados armazenados à fila cujo endereço foi passado;
+     - Não é possível visualizar uma função que realize a ordenação da Fila, a qual é responsável pela diferença no uso da Heurística Euclidiana para o BFS e somente o BFS. Isso se dá pelo fato de que a função responsável por tal ação se encontra dentro da supracita função, que será posteriormente explicada.
+     - Não é possível visualizar uma função que realiza o Enfileiramento, isso pelo fato de que a função responsável por tal ação está dentro da supracitada função, a qual será explicada posteriormente.
+   
+   ```c++
+   if (matrix[i][j + 1] == 'A' && (j < (matrix_tam - 1))) { 
+       matrix[i][j + 1] = '>';
+       euclidean_heuristic_calc(&euclidean_queue, i, j + 1);
+   }
+   ```
+   
+  - Por fim, a última condicional é utilizada como forma de ação extrema, e será chamada somente caso não haja nenhuma outra opção de movimento, exceto subir (claro, considerando que movimentos à esquerda jamais acontecerão no BFS), e é dada por meio da seguinte lógica:
+     - Por ser uma medida extrema, essa condicional somente entrará em vigor caso a fila esteja vazia, o que significaria que não há mais nenhuma forma de tentar os caminhos convencionais, (abaixo e à direita) e, para tal situação, é aberta essa exceção. A verificação quanto à vacuidade da Fila se dá pela função **_all_queues_empty()_**, que será detalhada subsecutivamente;
+     - Se a posição [ i - 1 ][ j ] for igual a 'A', quer dizer que não há uma barreira na mesma, logo, é uma posição que será analisada          posteriormente e, para tal, é necessário que ela seja enfileirada;
+     - Há também a necessidade de cumprir uma terceira verificação, sendo que *_i_* precise ser maior que 0, uma vez que, como será subtraído um à variável, é necessário verificar se, nessa subtração, o valor de *_i_* não extrapolará o limite de tamanho mínimo da Matriz (0).
+     - Como forma de identificação, é marcado o movimento que aconteceu na posição por meio do caractere '^', indicando que se moveu para posição acima;
+     - Em seguida, é chamada a função **_euclidean_heuristic_calc()_**, que recebe o endereço de uma Fila, juntamente aos valores de *_i_* e *_j_* que serão armazenados armazenados à fila cujo endereço foi passado;
+     - Não é possível visualizar uma função que realize a ordenação da Fila, a qual é responsável pela diferença no uso da Heurística Euclidiana para o BFS e somente o BFS. Isso se dá pelo fato de que a função responsável por tal ação se encontra dentro da supracita função, que será posteriormente explicada.
+     - Não é possível visualizar uma função que realiza o Enfileiramento, isso pelo fato de que a função responsável por tal ação está dentro da supracitada função, a qual será explicada posteriormente.
+   
+   ```c++
+   if (all_queues_empty(&default_bfs_queue, &manhattan_queue, &euclidean_queue) && matrix[i - 1][j] == 'A' && (i > 0)) { 
+       matrix[i - 1][j] = '^';
+       euclidean_heuristic_calc(&euclidean_queue, i - 1, j);
+   }
+   ```
+
+- Ao realizar todas as verificações sobreditas, é realizado o Desenfileiramento, utilizando a função **_euclidean_dequeue()_**, que puxará bloco de informações presentes na primeira posição da Fila, utilizando o endereço da variável de intermédio *_aux_*. Após tal ação, o contador de iterações é somado (+1), e o looping, qua atualmente está na cauda, volta à cabeça, conectando o que foi realizado nesta etapa (Desenfileiramento em *_aux_*), passando os valores de *_aux_* para suas respectivas variáveis:
+
+ ```c++
+euclidean_dequeue(&euclidean_queue, &aux);
+// Fim do looping
+.
+.
+.
+// Início do looping
+i = aux.pos_i;
+j = aux.pos_j;
+```
+#### A função *_euclidean_heuristic_calc(Fila *euclidean_queue, int i, int j)_*
+Utilizada em todos as condicionais, a função é de suma importância para o devido funcionamento do código, haja visto que, nela será calculada a distância *_d_*, mencionada no início do tópico.
+Ela receberá três parâmetros:
+  - 1º Parâmetro: endereço de uma fila na qual os valores serão armazenados;
+  - 2º Parâmetro: valor de *_i_*, o qual será essencial para o cálculo da distância, além de ser armazenado como uma possível posição a ser analisada;
+  - 3º Parametro: valor de *_j_*, o qual será essencial para o cálculo da distância, além de ser armazenado como uma possível posição a ser analisada.
+
+Para o cálculo da distância, haja visto que a questão exige a raiz quadrada, foi utilizada a função built-in **_sqrt()_**, a qual faz referência à "*_squareroot_*", ou *_raiz quadrada_*: 
+
+```c++
+float distance = sqrt(pow(abs((matrix_tam - 1) - i), 2) + pow(abs((matrix_tam - 1) - j), 2));
+```
+
+Na sequência, é necessário passar todos os valores que se deseja Enfileirar dentro de uma **Auxiliar** do tipo **Item**, a qual será, mais uma vez, chamada de *_aux_*, sendo responsável por fazer a comunicação dos valores com a fila:
+
+``` c++
+aux.euclidean_distance = distance;
+aux.pos_i = i;
+aux.pos_j = j;
+```
+
+Por fim, o valor é Enfileirado, por meio da função **_bfs_queue()_**, e logo em seguida, a Fila é ordenada na chamada da função **_euclidean_sort()_** (detalhado em ato contínuo). Finalmente, esse é o corpo final da função:
+
+```c++
+void euclidean_heuristic_calc(Fila *euclidean_queue, int i, int j) {
+     float distance;
+     Item aux;
+
+     distance = sqrt(pow(abs((matrix_tam - 1) - i), 2) + pow(abs((matrix_tam - 1) - j), 2));
+     aux.euclidean_distance = distance;
+     aux.pos_i = i;
+     aux.pos_j = j;
+
+     bfs_queue(euclidean_queue, aux);
+     euclidean_sort(euclidean_queue);
+}
+```
+
+#### A função *_euclidean_sort(Fila *euclidean_queue)_*
+Essencial para o correto funcionamento da Heurística Euclidiana, na supramencionada função, foi utilizado o método de ordenação **BubbleSort**, adpatado somenta para a ordenação de **Filas Dinâmicas**.
+
+Inicialmente, foram criados dois **Blocos Auxiliares**, sendo eles ***i** e ***j**, responsáveis por determinar os limites do looping.
+Assim como no **Método da Bolha** convencional, **i** começa do início do conjunto de valores, nesse caso, no início da fila, enquanto **j** sempre começará de **i + 1**, a fim de evitar repetições nas comparações, ambos controlados por loopings **while**, recebendo como parâmetro a ordem de rodar enquanto **i for diferente de NULO** para o primeiro looping, e enquanto **j for diferente de NULO** para o segundo looping. Caso fosse necessário ocorrer a troca de valores (o que se é esperado), foi utilizada a função **_swap_**, a fim de deixar o looping mais limpo. Ao fim, a função tomou o seguinte corpo:
+
+```c++
+void euclidean_sort(Fila *euclidean_queue) {
+    Block *i, *j;
+
+    i = euclidean_queue -> first -> prox;
+
+    while (i != NULL) {
+        j = i -> prox;
+        while (j != NULL) {
+            if (j -> data.euclidean_distance < i -> data.euclidean_distance) {
+                swap(i, j);
+            }
+            j = j -> prox;
+        }
+        i = i -> prox;
+    }
+}
+```
+<p align="center">
+  Finalizada toda a contextualização por trás da Heurística Euclidiana
+</p>
+
 
 ## Funcionamento do programa
   - É de suma importância que, para o correto funcionamento do programa, seja seguido o seguinte protocolo:
