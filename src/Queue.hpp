@@ -9,10 +9,6 @@ typedef struct Block Block;
 typedef struct Fila Fila;
 
 struct Item{
-	//int val;
-
-	// solving using Manhattan Euristic
-
 	int manhattan_distance;
 	int pos_i;
 	int pos_j;
@@ -43,12 +39,10 @@ bool all_queues_empty(Fila *bfs_queue, Fila *manhattan_queue, Fila *euclidean_qu
 void solve(int choice);
 
 void manhattan_heuristic_calc(Fila *manhattan_queue, int i, int j);
-// void manhattan_print(Fila *manhattan_queue);
 void manhattan_dequeue(Fila *manhattan_queue, Item *aux);
 void manhattan_sort(Fila *manhattan_queue);
 
 void euclidean_heuristic_calc(Fila *euclidean_queue, int i, int j);
-// void euclidean_print(Fila *euclidean_queue);
 void euclidean_dequeue(Fila *euclidean_queue, Item *aux);
 void euclidean_sort(Fila *euclidean_queue);
 

@@ -1,4 +1,5 @@
 #include "Queue.hpp"
+#include "Stack.hpp"
 using namespace std;
 
 void a_star_menu() {
@@ -22,8 +23,7 @@ void a_star_menu() {
         solve(1);
     } else if (option == 'C') {
         cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
-        cout << "\t\t\t\t   ~ You chose to quit ~" << endl << endl;
-        cout << "----------------------------------------------------------------------------------------------" << endl << endl;
+        cout << "\t\t\t\t   ~ You chose to quit ~" << endl;
     }
 }
 
@@ -47,7 +47,7 @@ void run() {
         } else if (option == 'B') {
             cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
             cout << "\t\t\t\t  ~ You chose the DFS method ~" << endl << endl;
-            // runMatrix();
+            runMatrix();
         } else if (option == 'C') {
             cout << endl << "----------------------------------------------------------------------------------------------" << endl << endl;
             cout << "\t\t\t\t ~ You chose the A* method ~" << endl << endl;

@@ -190,32 +190,6 @@ void euclidean_heuristic_calc(Fila *euclidean_queue, int i, int j) {
     euclidean_sort(euclidean_queue);
 }
 
-// void manhattan_print(Fila *f){
-// 	Block *aux;
-
-// 	aux = f -> first -> prox;
-	
-// 	while (aux != NULL) {
-//         cout << "\t\t@@\t   " << aux -> data.manhattan_distance;
-//         cout << "\t\t      " << aux -> data.pos_i;
-//         cout << "\t\t\t    " << aux -> data.pos_j << "\t\t@@" << endl;
-//         aux = aux -> prox;
-//     }
-// }
-
-// void euclidean_print(Fila *f) {
-//     Block *aux;
-
-//     aux = f -> first -> prox;
-
-//     while (aux != NULL) {
-//         cout << "\t\t\t   " << aux -> data.euclidean_distance;
-//         cout << "\t\t      " << aux -> data.pos_i;
-//         cout << "\t\t\t    " << aux -> data.pos_j << "\t\t" << endl;
-//         aux = aux -> prox;
-//     }
-// }
-
 void solve(int choice) {
 	int matrix_tam = return_matrix_size(), k = 0, i, j;
     char matrix[matrix_tam][matrix_tam], vet_aux[matrix_tam*matrix_tam];
@@ -304,15 +278,19 @@ void solve(int choice) {
             bfs_dequeue(&default_bfs_queue, &aux);
         }
         
-        if (i != matrix_tam-1 || j != matrix_tam-1) {
-            cont++;
-        }
+        cont++;
     }
 
     matrix[0][0] = 'S'; matrix[matrix_tam - 1][matrix_tam - 1] = 'F';
 
     cout << "\t\t\tAfter completing the process of roaming throughout " << endl;
-    cout << "\t\tthe entire matrix by the BFS method, we could count " << cont << " iterations.";
+    cout << "\t\tthe entire matrix by the BFS method,";
+    if (choice == 0) {
+        cout << " using the Manhattan Heuristic," << endl;
+    } else if (choice == 1) {
+        cout << " using the Euclidean Heuristic, " << endl;
+    }
+    cout << "\t\t\t\t   we could count " << cont << " iterations.";
     cout << endl << endl << "\t\t   ~ This is the path used to make it to the final position ~" << endl << endl;
 
     for (i = 0; i < matrix_tam; i++) {
