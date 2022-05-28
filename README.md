@@ -374,7 +374,7 @@ Podemos concluir que o valor de A é igual ao valor de B e, impreterivelmente, e
 
 <p align="center">
   <img height="250rem" src="/imgs/EuclideanMethod.png"></br>
-  <i> Na imagem acima, as posições demarcadas pela cor verde representam as posições pelas quais o código passou e optou por utilizá-la para      continuar, enquanto as em vermelho são posições pelas quais o programa passou, porem optou por não seguir por elas - Exemplificando o que      foi supracitado, sempre a preferência por avançar por linhas, não por colunas. 
+  <i> Na imagem acima, as posições demarcadas pela cor verde representam as posições pelas quais o código passou e optou por utilizá-la para      continuar, enquanto as em vermelho são posições pelas quais o programa passou, porem optou por não seguir por elas.
   </i>
 </p>
 
