@@ -54,9 +54,85 @@ circular no sistema DFS, descrevendo-o em ordem, da seguinte forma:
 Para que o programa não entre em um looping, foi necessário usar uma técnica de algoritmo guloso, igualando a uma barreira as posições válidas 
 e inválidas por onde passou, analisou e testou, para que não aconteça do programa voltar naquela posição e repita algum processo já testado antes.
 
+## Algoritmo A*
+
+O algoritmo A* é o resultado da junção de um algoritmo guloso chamado de heurística Euclidiana, o qual escolhe primeiro a melhor solução aparente no momento e um algoritmo de busca com custo uniforme chamado de heurística de Manhattan, cuja solução é sempre ótima.
+
+Podemos descrever as heurísticas Euclidiana e de Manhattan como complementares uma à outra, sendo a heurística Euclidiana, o cálculo em diagonal da distância de dois pontos dentro de uma matriz, e a heurística de Manhattan, o cálculo da menor distância possível entre esses dois pontos com movimentos verticais e horizontais.
+
+A partir dessas definições, é possível chegar a conclusão que a distância percorrida pela heurística de Manhattan é igual a: $$d = |Δi|+|Δj|$$ 
+
+E como dito acima, um método sendo complementar ao outro, a distância percorridas entre os mesmos dois pontos pela heurística Euclidiana é igual a: $$d = \sqrt{(Δi)²+(Δj)²}$$ 
+
+##
+
+<p align="center">
+  <img height="250rem" src="/imgs/caminhamento.png"></br>
+  <i>Imagem de exemplo de caminhamento em ruas</i>
+</p>
+
+<strong>Na imagem acima:</strong>
+<ul>
+  <li><strong>Vermelho:</strong> Distância de Manhattan</li>
+  <li><strong>Amarelo:</strong> Distância de Manhattan</li>
+  <li><strong>Azul:</strong> Distância de Manhattan</li>
+  <li><strong>Verde:</strong> Distância Euclidiana</li>
+</ul>
+
+Levando em consideração a linha verde como a heurística Euclidiana e as demais linhas como a heurística de Manhattan, podemos analisar na figura acima o que foi dito no parágrafo anterior, concluindo também que o Euclidiano é como se fosse uma hipotenusa de um triângulo e o Manhattan são os catetos do triângulo, e os cálculos dos mesmos são feitos da mesma forma descrita no parágrafo anterior, usando o Teorema de Pitágoras.
+
+### Funcionamento da Heurística de Manhattan
+
+Inicialmente, vale salientar que a teoria utilizada para a resolução do BFS utilizando este método se deu à uma aplicação que de fato ocorreu no
+mapa da cidade de Manhattan, Nova Iorque, Estados Unidos. Nele, a ideia é encontrar, por meio de dois pontos, qual será o menor caminho a ser percorrido,
+na vida real, para sair de um ponto inicial de um determinado quarteirão e chegar a outro. A partir disso, podemos utilizar o mesmo conceito para realiz
+ar o caminhamento em uma Matriz de tamanho NxN, considerando que cada uma das posições dela serão como uma quadra.
+
+Para, de fato, implementar a teoria ao código, faz-se necessário dissecar a equação previamente estabelecida:
+   - Como *_Δi_*, podemos entender que a variação pode ser descrita como **$i_f - i_a$**, sendo $i_f$ a linha final da matriz, a qual sempre
+   será $MatrixTam - 1$, enquanto $i_a$ será o valor de **_i_** na atual posição constatada.
+      - Exemplificando, se tivermos uma matriz de tamanho **_7_**, o primeiro cálculo para *_Δi_* será dado por $(6 - 0)$, isto devido à forma
+      que a linguagem C/C++ interpreta posições de array, começando sempre do 0 e indo até o $TamanhoMáximo - 1$, ou seja, 6.
+   - Para *_Δj_*, a variação seguirá a mesma proposta, **$j_f - j_a$**, sendo $j_f$ a coluna final da matriz, a qual, assim como anteriormente
+   detalhado, será $MatrixTam - 1$, enquanto $j_a$ será o valor de **_j_** na atual posição constatada.
+   
+Tendo isso em mente, a indagação de como esse tipo de cálculo pode interferir na forma com a qual o código se comporta é realizada, isto é, 
+de que forma usar a Heurística de Manhattan poderá se diferenciar de utilizar o BFS em sua configuração default?
+   - Bom, a resposta para tal questionamento é relativamente complexa, porém, uma vez compreendida, não haverá mais problemas para compreender
+   o restante, uma vez que ela se comportará da mesma forma por toda a execução.
+
+#### Algoritmo
+
+1. Iniciar das posições **_i = 0_** e **_j = 0_**, as quais definem a posição inicial da Matriz;
+2. Verificar a possibilidade de caminhamento para direita e para baixo, de forma idêntica ao BFS comum;
+3. Caso a posição esteja livre para caminhar:
+    - Será realizado o cálculo da distância entre o atual ponto até o ponto final, utilizando a equação $d = |Δi|+|Δj|$;
+    - Sendo esse cálculo realizado, tanto as coordenadas **_i_** e **_j_**, quanto a distância **_d_** serão enfileiradas;
+    - Logo após essa *_"atualização"_* na fila, ela deve ser ordenada de acordo com o valor das distâncias, sempre em ordem crescente.
+4. Desenfileirar o primeiro valor da Fila;
+5. Atribuir aos valores de **_i_** e **_j_**, os respectivos valores que acabaram de ser Desenfileirados;
+6. Repetir todo o processo de **2 a 5** até que **_i_** e **_j_** antinjam o valor desejado ($i = MatrixTam - 1$ e $j = MatrixTam - 1$) 
+
+#### Dissecando a Heurística de Manhattan
+
+A partir do **_Algoritmo_** apresentado, vale salientar que tal método utilizará do mesmo conceito de caminhamento do BFS para si, porém, seu diferencial se dá no processo presente no **Item 3** do tópico **Algoritmo**, mas por qual motivo?
+
+Inicialmente, deve-se compreender que, na *_Estrutura de Dados do tipo Fila_*, todos os valores são inseridos no final e são removidos do início. Levando tal característica em consideração, é plausível realizar a analogia que o primeiro valor da supracitada estrutura tem "prioridade", a qual será usada a favor do algoritmo como forma de dar prioridade à determinados valores;
+
+Visando a necessidade de a todo momento procurar a menor distância, compreende-se que os valores "priorizados" devem ser as posições as quais
+apresentam menor longinquidade à posição final e, devido à isso, o **Item 3.3** do tópico **Algoritmo** especifica que a ordenação deve ser dos menores valores aos maiores. Isso porque, devido ao fato de constantemente Desenfileirar valores a fim de realizar as novas análises, após realizar o processo para a Fila ordenada, serão captadas sempre as coordenadas indexadas à menor distância, sendo os valores mais longínquos temporariamente ignorados, assim sendo enquanto forem Enfileirados valores mais aproximados do fim. Ainda há de se salientar que, para situações como nas posições [0][1]$_A$ e [1][0]$_B$, realizando os devidos cálculos, utilizando como exemplo uma matriz quadrada de tamanho 7:
+$$d_A = |Δi|+|Δj| \quad → \quad d_A = |i_f - i_a| + |j_f - j_a| \quad → \quad d_A = |6 - 0| + |6 - 1| \quad → \quad d_A = 11$$
+$$d_B = |Δi|+|Δj| \quad → \quad d_B = |i_f - i_a| + |j_f - j_a| \quad → \quad d_B = |6 - 1| + |6 - 0| \quad → \quad d_B = 11$$
+$$d_A = d_B$$
+Podemos concluir que o valor de A é igual ao valor de B e, impreterivelmente, em todas as situações que a conjuntura acima ocorrer, o código optará por seguir o caminho que desde o início foi seu principal - no caso da implementação disponibilizada neste repositório, sempre optará por avançar uma linha, ao invés de caminhar uma posição com a coluna.
+
+### Exemplificando funcionamento da heurística Euclidiana
+
+      muitos códigos fodastíscos neste local
+
 ## Funcionamento do programa
   - É de suma importância que, para o correto funcionamento do programa, seja seguido o seguinte protocolo:
-    1. O nome do arquivo esteja corretamente especificado nas linhas 35 e 52 do arquivo **_Pile.cpp_**, em file.open("nomedoseuarquivo.txt");
+    1. O nome do arquivo esteja corretamente especificado nas linhas 35 e 52 do arquivo **_Stack.cpp_**, em file.open("nomedoseuarquivo.txt");
     2. O nome do arquivo esteja corretamente especificado nas linhas 56 e 73 do arquivo **_Queue.cpp_**, em file.open("nomedoseuarquivo.txt");
     3. O arquivo seja do tipo texto (.txt).
    
