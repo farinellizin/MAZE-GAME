@@ -639,7 +639,7 @@ Caso o usuário opte pela **Opção C**, será disponibilizado um novo menu a el
 </h4>
 
 <p align="center">
-  <img height="600rem" src="imgs/ExemploDeExecucaoMazeGame.gif"> <br>
+  <img height="600rem" src="/imgs/ExemploDeExecucaoMazeGame.gif"> <br>
   <i> GIF explicativo utilizando todos os métodos disponibilizados no programa.</i>
 </p>
 
