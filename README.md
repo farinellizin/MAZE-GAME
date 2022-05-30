@@ -637,7 +637,7 @@ Caso o usuário opte pela **Opção C**, será disponibilizado um novo menu a el
 </h4>
 
 <p align="center">
-  <img height="250rem" src="ExemploDeExecuçãoMaze-Game.gif"> <br>
+  <img height="250rem" src="ExemploDeExecucaoMazeGame.gif"> <br>
 </p>
 
 
