@@ -364,8 +364,10 @@ Inicialmente, deve-se compreender que, na *_Estrutura de Dados do tipo Fila_*, t
 
 Visando a necessidade de a todo momento procurar a menor distância, compreende-se que os valores "priorizados" devem ser as posições as quais
 apresentam menor longinquidade à posição final e, devido à isso, o **Item 3.3** do tópico **Algoritmo** especifica que a ordenação deve ser dos menores valores aos maiores. Isso porque, devido ao fato de constantemente Desenfileirar valores a fim de realizar as novas análises, após realizar o processo para a Fila ordenada, serão captadas sempre as coordenadas indexadas à menor distância, sendo os valores mais longínquos temporariamente ignorados, assim sendo enquanto forem Enfileirados valores mais aproximados do fim. Ainda há de se salientar que, para situações como nas posições [0][1]$_A$ e [1][0]$_B$, realizando os devidos cálculos, utilizando como exemplo uma matriz quadrada de tamanho 7:
-$$d_A = \sqrt{(Δi)²+(Δj)²} \quad → \quad d_A = \sqrt{(i_f - i_a)²+(j_f - j_a)²} \quad → \quad d_A = \sqrt{(6 - 0)²+(6 - 1)²} \quad → \quad d_A = \sqrt{36 + 25} \quad → \quad d_A = \sqrt{61} \quad → \quad d_A = 8,48$$
-$$d_B = \sqrt{(Δi)²+(Δj)²} \quad → \quad d_B = \sqrt{(i_f - i_a)²+(j_f - j_a)²} \quad → \quad d_B = \sqrt{(6 - 1)²+(6 - 0)²} \quad → \quad d_B = \sqrt{25 + 36} \quad → \quad d_B = \sqrt{61} \quad → \quad d_B = 8,48$$
+$$d_A = \sqrt{(Δi)²+(Δj)²} \quad → \quad d_A = \sqrt{(i_f - i_a)²+(j_f - j_a)²} \quad → \quad $$
+$$d_A = \sqrt{(6 - 0)²+(6 - 1)²} \quad → \quad d_A = \sqrt{36 + 25} \quad → \quad d_A = \sqrt{61} \quad → \quad d_A = 8,48$$
+$$d_B = \sqrt{(Δi)²+(Δj)²} \quad → \quad d_B = \sqrt{(i_f - i_a)²+(j_f - j_a)²} \quad → \quad $$
+$$ d_B = \sqrt{(6 - 1)²+(6 - 0)²} \quad → \quad d_B = \sqrt{25 + 36} \quad → \quad d_B = \sqrt{61} \quad → \quad d_B = 8,48$$
 $$d_A = d_B$$
 
 Podemos concluir que o valor de A é igual ao valor de B e, impreterivelmente, em todas as situações que a conjuntura acima ocorrer, o código optará por seguir o caminho que desde o início foi seu principal - no caso da implementação disponibilizada neste repositório, sempre optará por avançar uma linha, ao invés de caminhar uma posição com a coluna.
@@ -637,14 +639,15 @@ Caso o usuário opte pela **Opção C**, será disponibilizado um novo menu a el
 </h4>
 
 <p align="center">
-  <img height="250rem" src="ExemploDeExecucaoMazeGame.gif"> <br>
+  <img height="600rem" src="imgs/ExemploDeExecucaoMazeGame.gif"> <br>
+  <i> GIF explicativo utilizando todos os métodos disponibilizados no programa.</i>
 </p>
 
 
 ## Funcionamento do programa
   - É de suma importância que, para o correto funcionamento do programa, seja seguido o seguinte protocolo:
     1. O nome do arquivo esteja corretamente especificado nas linhas 35 e 52 do arquivo **_Stack.cpp_**, em file.open("nomedoseuarquivo.txt");
-    2. O nome do arquivo esteja corretamente especificado nas linhas 56 e 73 do arquivo **_Queue.cpp_**, em file.open("nomedoseuarquivo.txt");
+    2. O nome do arquivo esteja corretamente especificado nas linhas 97 e 114 do arquivo **_Queue.cpp_**, em file.open("nomedoseuarquivo.txt");
     3. O arquivo seja do tipo texto (.txt).
    
   - Para mudar o tamanho da matriz e seus valores:
