@@ -130,7 +130,7 @@ Podemos concluir que o valor de A é igual ao valor de B e, impreterivelmente, e
 
 <p align="center">
   <img height="250rem" src="/imgs/ManhattanMethod.png"></br>
-  <i> Na imagem acima, as posições demarcadas pela cor verde representam as posições pelas quais o código passou e optou por utilizá-la para      continuar, enquanto as em vermelho são posições pelas quais o programa passou, porem optou por não seguir por elas - Exemplificando o que      foi supracitado, sempre a preferência por avançar por linhas, não por colunas. 
+  <i> Na imagem acima, as posições demarcadas pela cor verde representam as posições pelas quais o código passou e optou por utilizá-la para      continuar, enquanto as em vermelho são posições pelas quais o programa passou, porém optou por não segui-las - Exemplificando o que      foi supracitado, sempre a preferência por avançar por linhas, não por colunas. 
   </i>
 </p>
 
@@ -374,7 +374,7 @@ Podemos concluir que o valor de A é igual ao valor de B e, impreterivelmente, e
 
 <p align="center">
   <img height="250rem" src="/imgs/EuclideanMethod.png"></br>
-  <i> Na imagem acima, as posições demarcadas pela cor verde representam as posições pelas quais o código passou e optou por utilizá-la para      continuar, enquanto as em vermelho são posições pelas quais o programa passou, porem optou por não seguir por elas.
+  <i> Na imagem acima, as posições demarcadas pela cor verde representam as posições pelas quais o código passou e optou por utilizá-la para      continuar, enquanto as em vermelho são posições pelas quais o programa passou, porém optou por não segui-las.
   </i>
 </p>
 
@@ -564,6 +564,80 @@ void euclidean_sort(Fila *euclidean_queue) {
 ```
 <p align="center">
   Finalizada toda a contextualização por trás da Heurística Euclidiana
+</p>
+
+#### A função *_all_queues_empty(Fila *bfs_queue, Fila *manhattan_queue, Fila *euclidean_queue)_*
+A função supracitada pôde ser vista no código por diversas vezes, ela tem como objetivo retornar **true** caso todas as filas presentes nos parâmetros estejam vazias. Mas por qual motivo haveria a necessidade de saber se todas as filas estão vaizas?
+Bom, em diversos modelos de Matrizes com bloqueios, pode-se chegar ao ponto em que não haja nenhuma outra saída a não ser se locomover para cima. Porém, no BFS, sabe-se que o intuito é sempre andar no formato de onda, movendo-se para a direita e para baixo, sempre Enfileirando e Desenfileirando posições as quais serão analisadas. Sendo assim, enquanto houverem saídas convencionais (direita e baixo), a fila permanecerá com valores dentro dela, não estando vazia e retornando **false**. Contudo, se a Fila estiver vazia, subentende-se que todas as posições já foram analisadas, e em nenhuma delas a movimentação está disponível, sendo assim, a função retornará **true**, permitindo, portanto, que o código caminhe para cima.
+
+**_Porque verificar se todas as filas estão vazias, ao invés de verificar somente uma?_**
+
+A resposta para isso se dá devido à forma com que o código foi estruturado, e é bem simples. Em suas primeiras linhas, são criadas três diferentes filas, uma relacionada à resolução utilizando somente o **BFS - bfs_queue**, outra, relacionada a resolução utilizando o **BFS em conjunto à Heurística de Manhattan - manhattan_queue** e, por fim, a resolução utilizando o **BFS em conjunto a Heurística Euclidiana - euclidean_queue**. Todas as filas anteriormente citadas são feitas vazias, como forma de inicilizá-las e iniciar o procedimento de resolução, como pode ser visto no bloco de código abaixo:
+
+```c++
+Fila manhattan_queue, euclidean_queue, default_bfs_queue;
+FFVazia(&manhattan_queue);
+FFVazia(&euclidean_queue);
+FFVazia(&default_bfs_queue);
+```
+
+Durante a execução do programa, é diferenciado qual dos métodos é utilizado por meio de um inteiro passado à função, e, por isso, somente uma das Filas será preenchida, sendo essa a relacionada ao método que o usuário desejar. Com isso, é plausível concluir que, se somente uma delas será preenchida, as outras sempre estarão vazias, não podendo utilizar somente uma para realizar essa checagem. Por exemplo, caso seja escolhido a Heurística de Manhattan, somente ela será manipulada, enquanto as outras permanecerão vazias. Se, e somente se, a **manhattan_queue** estiver vazia (no atual contexto explicativo), então poderá ser feito o caminhamento em direção superior, porque as outras também estaão, haja visto que durante toda a execução atual, nenhuma delas terão sido manipuladas, permanecendo da forma que iniciaram, vazias.
+
+### Conclusões finais
+
+Após toda a contextualização antecedentemente realizada, também por meio de diversas execuções utilizando distintas configurações de Matrizes, foi possível observas divergências na forma que as Heurísticas se comportam.
+
+Inicialmente, após testes utilizando a **Heurística de Manhattan**, foi possível perceber um comportamento ***semelhante*** ao método do **DFS**. Isso devido ao fato de como foi estruturada sua fórmula, sempre buscando andar em linhas retas enquanto for possível. A constatação anterior pode ser visualizada na figura abaixo:
+
+<p align="center">
+  <img height="250rem" src="/imgs/ManhattanMethodNoBlocks.png"></br>
+  <i> É possivel visualizar o caminhamento contínuo em direção abaixo, até o momento que não é mais possível, optando por seguir, incondicionalmente a direção à direita.</i>
+</p>
+
+Por outro lado, após repetidos testes utilizando a **Heurística Euclidiana**, é possível visualizar um comportamento em formato de **escada**. Assim como o comportamento de **Manhattan**, no **Euclidiano**, as decisões também são baseadas pela forma na qual a fórmula foi estruturada. Nela, pode-se perceber uma grande semelhança ao ***Teorema de Pitágoras*** e, devido à isso, busca sempre caminhos na diagonal, não perfeitas, haja visto que foi trabalhado em cima de um array com pontos exatos, portanto, com um tamanho maior, a aplicação poderia ser vista com mais clareza. A constatação anterior pode ser visualizada na figura posteriormente disposta:
+
+<p align="center">
+  <img height="250rem" src="/imgs/EuclideanMethodNoBlocks.png"></br>
+  <i> É possivel visualizar o caminhamento sempre buscando a diagonal, sempre que possível.</i>
+</p>
+
+<p align="center">
+  <strong>
+    Vale salientar que ambos os testes anteriores foram realizados em Matrizes livres de bloqueios.
+  </strong>
+</p>
+
+Por fim, vale salientar que o comportamento anteriormente descrito para ambos os métodos podem ser visto na prática para qualquer tipo de Matriz, com N diferentes tipos de bloqueios, como pôde ser visualizado nas imagens presentes nos tópicos referentes a cada um dos métodos. Ademais, é plausível citar que em ambos os métodos, será apresentado o mesmo número de iterações: **13 iterações**. A partir desta análise, pode-se concluir que ambos os métodos buscarão sempre o menor número de iterações, contudo, por caminhos diferentes.
+
+## A junção de todos os métodos
+
+Inicialmente, o repositório teve como princípio a resolução de dois tipos de caminhamento: **BFS** e **DFS**. Entretanto, com a proposta de implementar o **A***, mais dois métodos novos foram incluídos e, devido à isso, o antigo Menu, com somente duas opções, não se fazia mais eficiente.
+
+Visando a problemática supracitada, houveram mudanças no Menu, sendo sua atualização possível de ser visualizada na imagem abaixo:
+
+<p align="center">
+  <img height="250rem" src="/imgs/MainMenu.png"></br>
+  <i> Menu principal disponibilizado buscando a interção entre usuário e programa, possibilitando que o mesmo escolha qual dos métodos de caminhamento é desejado.</i>
+</p>
+
+Ademais, é de suma importância evidenciar que o método do **A*** tem, no geral, a mesma estutura de solução do **BFS** e, para isso, a função responsável para a implementção do conjunto **Heurística de Manhattan, Heurística Euclidiana e BFS** recebe uma variável do tipo **Inteiro** nomeada **"choice"**, cuja função é:
+- Caso **choice = 0**: a função de implementação do **BFS** compreenderá que se busca a resolução utilizando a **Heurística de Manhattan** e, para tal, só serão chamadas funções referentes à implementação da mesma.
+- Caso **choice = 1**: a função de implementação do **BFS** compreenderá que se busca a resolução utilizando a **Heurística Euclidiana** e, para tal, só serão chamadas funções referentes à implementação da mesma.
+- Caso **choice = 2**: a função de implementação do **BFS** compreenderá que não é necessário utilizar nenhuma das heurísticas, chamando as funçṍes necessárias para a implementação do **BFS Default**.
+
+Caso o usuário opte pela **Opção C**, será disponibilizado um novo menu a ele, de forma que o permita decidir entre a **Heurística de Manhattan** ou a **Heurística Euclidiana**, como pode ser visualizado na imagem abaixo:
+
+<p align="center">
+  <img height="250rem" src="/imgs/A*Menu.png"></br>
+  <i> Menu principal disponibilizado buscando a interção entre usuário e programa, possibilitanto que o mesmo escolha qual Heurística é desejada.</i>
+</p>
+
+<h4 align="center">
+  Exemplificando a execução do programa
+</h4>
+
+<p align="center">
+  <img height="250rem" src="ExemploDeExecuçãoMaze-Game.gif"> <br>
 </p>
 
 

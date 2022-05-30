@@ -286,11 +286,13 @@ void solve(int choice) {
     cout << "\t\t\tAfter completing the process of roaming throughout " << endl;
     cout << "\t\tthe entire matrix by the BFS method,";
     if (choice == 0) {
-        cout << " using the Manhattan Heuristic," << endl;
+        cout << " using the Manhattan Heuristic," << endl << "\t\t\t\t   we could count " << cont << " iterations.";
     } else if (choice == 1) {
-        cout << " using the Euclidean Heuristic, " << endl;
+        cout << " using the Euclidean Heuristic, " << endl << "\t\t\t\t   we could count " << cont << " iterations.";
+    } else {
+        cout << " we could count " << cont << " iterations."; 
     }
-    cout << "\t\t\t\t   we could count " << cont << " iterations.";
+
     cout << endl << endl << "\t\t   ~ This is the path used to make it to the final position ~" << endl << endl;
 
     for (i = 0; i < matrix_tam; i++) {
